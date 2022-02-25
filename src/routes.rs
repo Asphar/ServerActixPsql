@@ -41,7 +41,7 @@ fn add_single_link(
             Ok(result) => Ok(result),
             Err(_) => {
                 let new_link = LinkNew {
-                    //id: &item.id,
+  
                     link: &item.link,
                     title: &item.title,
                     date_created: &format!("{}", chrono::Local::now()
@@ -53,7 +53,7 @@ fn add_single_link(
                     .execute(&db_connection)
                     .expect("Error saving new link");
 
-                let result = links.order(id.desc())
+                let result = links.order(id_link.desc())
                     .first(&db_connection).unwrap();
                 Ok(result)
             }

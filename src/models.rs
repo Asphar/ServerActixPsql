@@ -3,7 +3,7 @@ use crate::schema::*;
 
 #[derive(Debug, Serialize, Deserialize, Queryable)]
 pub struct Link {
-    pub id: i32,
+    pub id_link: i32,
     pub link: String,
     pub title: String,
     pub date_create: String
