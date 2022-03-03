@@ -1,5 +1,5 @@
 use crate::Pool;
-use crate::models::{Link, LinkJson, LinkNew};
+use crate::models::{User, UserJson, UserNew};
 
 use actix_web::{Error, HttpResponse, web};
 use actix_web::http::{StatusCode};
@@ -28,7 +28,7 @@ pub async fn css_home() -> Result<HttpResponse, Error> {
 
 pub async fn add_link(
     pool: web::Data<Pool>,
-    item: web::Json<LinkJson>
+    item: web::Json<UserJson>
 ) -> Result<HttpResponse, Error> {
     Ok(
         web::block(move || add_single_link(pool, item))
@@ -40,17 +40,17 @@ pub async fn add_link(
 
 fn add_single_link(
     pool: web::Data<Pool>,
-    item: web::Json<LinkJson>
-) -> Result<Link, diesel::result::Error> {
+    item: web::Json<UserJson>
+) -> Result<User, diesel::result::Error> {
     use crate::schema::users::dsl::*;
     let db_connection = pool.get().unwrap();
 
     match users
         .filter(link.eq(&item.link))
-        .first::<Link>(&db_connection) {
+        .first::<User>(&db_connection) {
             Ok(result) => Ok(result),
             Err(_) => {
-                let new_link = LinkNew {
+                let new_link = UserNew {
   
                     link: &item.link,
                     title: &item.title,
@@ -83,9 +83,9 @@ pub async fn get_links(
 
 async fn get_all_links(
     pool: web::Data<Pool>
-) -> Result<Vec<Link>, diesel::result::Error> {
+) -> Result<Vec<User>, diesel::result::Error> {
     use crate::schema::users::dsl::*;
     let db_connection = pool.get().unwrap();
-    let result = users.load::<Link>(&db_connection)?;
+    let result = users.load::<User>(&db_connection)?;
     Ok(result)
 }
