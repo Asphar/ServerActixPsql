@@ -13,6 +13,16 @@ pub async fn home() -> Result<HttpResponse, Error> {
         HttpResponse::build(StatusCode::OK)
             .content_type("text/html; charset=utf-8")
             .body(include_str!("../templates/index.html"))
+        
+    )
+}
+
+pub async fn css_home() -> Result<HttpResponse, Error> {
+    Ok(
+        HttpResponse::build(StatusCode::OK)
+            .content_type("text/css; charset=utf-8")
+            .body(include_str!("../templates/home.css"))
+        
     )
 }
 
@@ -32,10 +42,10 @@ fn add_single_link(
     pool: web::Data<Pool>,
     item: web::Json<LinkJson>
 ) -> Result<Link, diesel::result::Error> {
-    use crate::schema::links::dsl::*;
+    use crate::schema::users::dsl::*;
     let db_connection = pool.get().unwrap();
 
-    match links
+    match users
         .filter(link.eq(&item.link))
         .first::<Link>(&db_connection) {
             Ok(result) => Ok(result),
@@ -48,12 +58,12 @@ fn add_single_link(
                         .naive_local())
                 };
 
-                insert_into(links)
+                insert_into(users)
                     .values(&new_link)
                     .execute(&db_connection)
                     .expect("Error saving new link");
 
-                let result = links.order(id_link.desc())
+                let result = users.order(id_link.desc())
                     .first(&db_connection).unwrap();
                 Ok(result)
             }
@@ -74,8 +84,8 @@ pub async fn get_links(
 async fn get_all_links(
     pool: web::Data<Pool>
 ) -> Result<Vec<Link>, diesel::result::Error> {
-    use crate::schema::links::dsl::*;
+    use crate::schema::users::dsl::*;
     let db_connection = pool.get().unwrap();
-    let result = links.load::<Link>(&db_connection)?;
+    let result = users.load::<Link>(&db_connection)?;
     Ok(result)
 }

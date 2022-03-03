@@ -5,54 +5,134 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="text/javascript">
-        function sendJSON(){
+        function Login(){
               
               let result = document.querySelector('.result');
-              let name = document.querySelector('#name');
+              let user = document.querySelector('#user');
               let email = document.querySelector('#email');
-                
+              let password = document.querySelector('#pass');
+              let verif_pass = document.querySelector('#verif_pass');
+                  
               // Creating a XHR object
               let xhr = new XMLHttpRequest();
               let url = "/addlink";
-         
+           
               // open a connection
               xhr.open("POST", url, true);
-   
+     
               // Set the request header i.e. which type of content you are sending
               xhr.setRequestHeader("Content-Type", "application/json");
-   
+     
               // Create a state change callback
               xhr.onreadystatechange = function () {
                   if (xhr.readyState === 4 && xhr.status === 200) {
-   
+     
                       // Print received data from server
                       result.innerHTML = this.responseText;
-   
+     
                   }
               };
-   
+     
               // Converting JSON data to string
-              var data = JSON.stringify({ "link": name.value, "title": email.value });
-   
+              var data = JSON.stringify({ "username": user.value, "password": password.value });
+     
               // Sending data with the request
               xhr.send(data);
+            }
+
+
+        function signUp(){
+              
+            let result = document.querySelector('.result');
+            let user = document.querySelector('#user');
+            let email = document.querySelector('#email');
+            let password = document.querySelector('#pass');
+            let verif_pass = document.querySelector('#verif_pass');
+                
+            // Creating a XHR object
+            let xhr = new XMLHttpRequest();
+            let url = "/addlink";
+         
+            // open a connection
+            xhr.open("POST", url, true);
+   
+            // Set the request header i.e. which type of content you are sending
+            xhr.setRequestHeader("Content-Type", "application/json");
+   
+            // Create a state change callback
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+   
+                    // Print received data from server
+                    result.innerHTML = this.responseText;
+   
+                }
+            };
+   
+            // Converting JSON data to string
+            var data = JSON.stringify({ "username": user.value, "email": email.value, "password": password.value, "verif_pass": verif_pass.value });
+   
+            // Sending data with the request
+            xhr.send(data);
           }
     </script>
+    <link rel="stylesheet" href="./home.css">
     <title>Document</title>
 </head>
-<body>   
-      <p>
-          <!-- Making a text input -->
-          <input type="text" id="name" placeholder="Your name">
-          <input type="email" id="email" placeholder="Email">
-           
-          <!-- Button to send data -->
-          <button onclick="sendJSON()">Send JSON</button>
-   
-        <!-- For printing result from server -->
-        <p class="result" style="color:green"></p>
-     </p>
-    <!-- Include the JavaScript file -->
-      
+<body>
+    <div class="login-wrap">
+        <div class="login-html">
+            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+            <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+            <div class="login-form">
+                <div class="sign-in-htm">
+                    <div class="group">
+                        <label for="user" class="label">Username</label>
+                        <input id="user" type="text" class="input">
+                    </div>
+                    <div class="group">
+                        <label for="pass" class="label">Password</label>
+                        <input id="pass" type="password" class="input" data-type="password">
+                    </div>
+                    <div class="group">
+                        <input id="check" type="checkbox" class="check" checked>
+                        <label for="check"><span class="icon"></span> Keep me Signed in</label>
+                    </div>
+                    <div class="group">
+                        <button class="button" onclick="Login()">Sign in</button>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="foot-lnk">
+                        <a href="#forgot">Forgot Password?</a>
+                    </div>
+                </div>
+                <div class="sign-up-htm">
+                    <div class="group">
+                        <label for="user" class="label">Username</label>
+                        <input id="user" type="text" class="input">
+                    </div>
+                    <div class="group">
+                        <label for="pass" class="label">Password</label>
+                        <input id="pass" type="password" class="input" data-type="password">
+                    </div>
+                    <div class="group">
+                        <label for="pass" class="label">Repeat Password</label>
+                        <input id="verif_pass" type="password" class="input" data-type="password">
+                    </div>
+                    <div class="group">
+                        <label for="pass" class="label">Email Address</label>
+                        <input id="email" type="text" class="input">
+                    </div>
+                    <div class="group">
+                        <button class="button" onclick="signUp()">Sign up</button>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="foot-lnk">
+                        <label for="tab-1">Already a member of Shield Factory ?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

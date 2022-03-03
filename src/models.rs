@@ -10,7 +10,7 @@ pub struct Link {
 }
 
 #[derive(Debug, Insertable)]
-#[table_name = "links"]
+#[table_name = "users"]
 pub struct LinkNew<'a> {
     pub link: &'a str,
     pub title: &'a str,

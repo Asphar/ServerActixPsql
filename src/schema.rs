@@ -1,5 +1,5 @@
 table! {
-    links (id_link) {
+    users (id_link) {
         id_link -> Int4,
         link -> Text,
         title -> Text,
