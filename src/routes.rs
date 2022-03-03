@@ -46,24 +46,24 @@ fn add_single_link(
     let db_connection = pool.get().unwrap();
 
     match users
-        .filter(link.eq(&item.link))
+        .filter(username.eq(&item.username))
         .first::<User>(&db_connection) {
             Ok(result) => Ok(result),
             Err(_) => {
-                let new_link = UserNew {
+                let new_user = UserNew {
   
-                    link: &item.link,
-                    title: &item.title,
+                    username: &item.username,
+                    passwd: &item.passwd,
                     date_created: &format!("{}", chrono::Local::now()
                         .naive_local())
                 };
 
                 insert_into(users)
-                    .values(&new_link)
+                    .values(&new_user)
                     .execute(&db_connection)
                     .expect("Error saving new link");
 
-                let result = users.order(id_link.desc())
+                let result = users.order(id_user.desc())
                     .first(&db_connection).unwrap();
                 Ok(result)
             }
@@ -88,4 +88,5 @@ async fn get_all_links(
     let db_connection = pool.get().unwrap();
     let result = users.load::<User>(&db_connection)?;
     Ok(result)
+
 }

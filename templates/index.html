@@ -8,17 +8,16 @@
         function Login(){
               
               let result = document.querySelector('.result');
-              let user = document.querySelector('#user');
-              let email = document.querySelector('#email');
-              let password = document.querySelector('#pass');
-              let verif_pass = document.querySelector('#verif_pass');
+              let user = document.querySelector('#user_sign_in');
+              let password = document.querySelector('#pass_sign_in');
+
                   
               // Creating a XHR object
               let xhr = new XMLHttpRequest();
-              let url = "/addlink";
+              let url = "/getlinks";
            
               // open a connection
-              xhr.open("POST", url, true);
+              xhr.open("GET", url, true);
      
               // Set the request header i.e. which type of content you are sending
               xhr.setRequestHeader("Content-Type", "application/json");
@@ -29,12 +28,13 @@
      
                       // Print received data from server
                       result.innerHTML = this.responseText;
+                      window.location.replace("https://www.google.com");
      
                   }
               };
      
               // Converting JSON data to string
-              var data = JSON.stringify({ "username": user.value, "password": password.value });
+              var data = JSON.stringify({ "username": user.value, "passwd": password.value });
      
               // Sending data with the request
               xhr.send(data);
@@ -44,9 +44,9 @@
         function signUp(){
               
             let result = document.querySelector('.result');
-            let user = document.querySelector('#user');
+            let user = document.querySelector('#user_sign_up');
             let email = document.querySelector('#email');
-            let password = document.querySelector('#pass');
+            let password = document.querySelector('#pass_sign_up');
             let verif_pass = document.querySelector('#verif_pass');
                 
             // Creating a XHR object
@@ -65,12 +65,12 @@
    
                     // Print received data from server
                     result.innerHTML = this.responseText;
-   
+
                 }
             };
    
             // Converting JSON data to string
-            var data = JSON.stringify({ "username": user.value, "email": email.value, "password": password.value, "verif_pass": verif_pass.value });
+            var data = JSON.stringify({ "username": user.value, "email": email.value, "passwd": password.value, "verif_pass": verif_pass.value });
    
             // Sending data with the request
             xhr.send(data);
@@ -88,11 +88,11 @@
                 <div class="sign-in-htm">
                     <div class="group">
                         <label for="user" class="label">Username</label>
-                        <input id="user" type="text" class="input">
+                        <input id="user_sign_in" type="text" class="input">
                     </div>
                     <div class="group">
                         <label for="pass" class="label">Password</label>
-                        <input id="pass" type="password" class="input" data-type="password">
+                        <input id="pass_sign_in" type="password" class="input" data-type="password">
                     </div>
                     <div class="group">
                         <input id="check" type="checkbox" class="check" checked>
@@ -109,11 +109,11 @@
                 <div class="sign-up-htm">
                     <div class="group">
                         <label for="user" class="label">Username</label>
-                        <input id="user" type="text" class="input">
+                        <input id="user_sign_up" type="text" class="input">
                     </div>
                     <div class="group">
                         <label for="pass" class="label">Password</label>
-                        <input id="pass" type="password" class="input" data-type="password">
+                        <input id="pass_sign_up" type="password" class="input" data-type="password">
                     </div>
                     <div class="group">
                         <label for="pass" class="label">Repeat Password</label>
