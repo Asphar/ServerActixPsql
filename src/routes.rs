@@ -1,6 +1,9 @@
 use crate::Pool;
 use crate::models::{User, UserJson, UserNew};
 
+#[path = "./cipher.rs"] mod cipher;
+
+use cipher::{sha_512};
 use actix_web::{Error, HttpResponse, web};
 use actix_web::http::{StatusCode};
 use diesel::RunQueryDsl;
@@ -53,7 +56,8 @@ fn add_single_link(
                 let new_user = UserNew {
   
                     username: &item.username,
-                    passwd: &item.passwd,
+                    //passwd: &item.passwd,
+                    passwd: &format!("{}", sha_512(&item.passwd)),
                     date_created: &format!("{}", chrono::Local::now()
                         .naive_local())
                 };

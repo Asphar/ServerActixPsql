@@ -17,3 +17,9 @@ serde_derive = "1.0"
 serde_json = "1.0"
 anyhow = "1.0"
 chrono = "0.4.15"
+easy-hasher = "2.2.1"
+#Sha512
+
+rand = "0.8.4"
+rust-argon2 = "0.8"
+#Argon2
