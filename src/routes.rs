@@ -3,7 +3,7 @@ use crate::models::{User, UserJson, UserNew};
 
 #[path = "./cipher.rs"] mod cipher;
 
-use cipher::{sha_512};
+use cipher::{sha_512, argon2};
 use actix_web::{Error, HttpResponse, web};
 use actix_web::http::{StatusCode};
 use diesel::RunQueryDsl;
@@ -29,6 +29,13 @@ pub async fn css_home() -> Result<HttpResponse, Error> {
     )
 }
 
+async fn login_get(item: web::Json<UserJson>) -> Result<HttpResponse, Error> {
+    Ok(
+        HttpResponse::Ok().finish()
+    )
+}
+
+
 pub async fn add_link(
     pool: web::Data<Pool>,
     item: web::Json<UserJson>
@@ -39,7 +46,9 @@ pub async fn add_link(
             .map(|link| HttpResponse::Created().json(link))
             .map_err(|_| HttpResponse::InternalServerError())?
     )
+    
 }
+
 
 fn add_single_link(
     pool: web::Data<Pool>,
@@ -57,7 +66,7 @@ fn add_single_link(
   
                     username: &item.username,
                     //passwd: &item.passwd,
-                    passwd: &format!("{}", sha_512(&item.passwd)),
+                    passwd: &format!("{}", argon2(&item.passwd)),
                     date_created: &format!("{}", chrono::Local::now()
                         .naive_local())
                 };
@@ -93,4 +102,51 @@ async fn get_all_links(
     let result = users.load::<User>(&db_connection)?;
     Ok(result)
 
+}
+
+///////
+
+pub async fn delete_link(
+    pool: web::Data<Pool>,
+    item: web::Json<UserJson>
+) -> Result<HttpResponse, Error> {
+    Ok(
+        web::block(move || delete_single_link(pool, item))
+            .await
+            .map(|link| HttpResponse::Created().json(link))
+            .map_err(|_| HttpResponse::InternalServerError())?
+    )
+}
+
+fn delete_single_link(
+    pool: web::Data<Pool>,
+    item: web::Json<UserJson>
+) -> Result<User, diesel::result::Error> {
+    use crate::schema::users::dsl::*;
+    let db_connection = pool.get().unwrap();
+
+    match users
+        .filter(username.eq(&item.username))
+        .first::<User>(&db_connection) {
+            Ok(result) => Ok(result),
+            Err(_) => {
+                let new_user = UserNew {
+  
+                    username: &item.username,
+                    //passwd: &item.passwd,
+                    passwd: &format!("{}", sha_512(&item.passwd)),
+                    date_created: &format!("{}", chrono::Local::now()
+                        .naive_local())
+                };
+
+                insert_into(users)
+                    .values(&new_user)
+                    .execute(&db_connection)
+                    .expect("Error saving new link");
+
+                let result = users.order(id_user.desc())
+                    .first(&db_connection).unwrap();
+                Ok(result)
+            }
+        }
 }

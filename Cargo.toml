@@ -18,6 +18,11 @@ serde_json = "1.0"
 anyhow = "1.0"
 chrono = "0.4.15"
 easy-hasher = "2.2.1"
+actix-web-httpauth = { git = "https://github.com/actix/actix-web-httpauth" }
+alcoholic_jwt = "1.0.0"
+derive_more = "0.99.2"
+reqwest = "0.9.22"
+
 #Sha512
 
 rand = "0.8.4"

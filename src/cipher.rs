@@ -46,8 +46,8 @@ pub fn private_salt() -> [u8; 32] {
 	return salt;
 }
 
-fn argon2() -> String{
-	let password = sha_512("test");
+pub fn argon2(input_text: &str) -> String{
+	let password = sha_512(&input_text);
 	// Ici sera récupéré le mot de passe salé et haché en sha512 afin qu'il puisse être chiffré en argon2i 
 	
 	let salt = private_salt();

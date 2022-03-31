@@ -10,6 +10,7 @@
               let result = document.querySelector('.result');
               let user = document.querySelector('#user_sign_in');
               let password = document.querySelector('#pass_sign_in');
+              const link = document.querySelector('#signin_button');
 
                   
               // Creating a XHR object
@@ -27,7 +28,7 @@
                   if (xhr.readyState === 4 && xhr.status === 200) {
      
                       // Print received data from server
-                      result.innerHTML = this.responseText;
+                      // result.innerHTML = this.responseText;
                       window.location.replace("https://www.google.com");
      
                   }
@@ -48,6 +49,9 @@
             let email = document.querySelector('#email');
             let password = document.querySelector('#pass_sign_up');
             let verif_pass = document.querySelector('#verif_pass');
+            const link = document.querySelector('#signup_button');
+
+            console.log(link);
                 
             // Creating a XHR object
             let xhr = new XMLHttpRequest();
@@ -64,7 +68,7 @@
                 if (xhr.readyState === 4 && xhr.status === 200) {
    
                     // Print received data from server
-                    result.innerHTML = this.responseText;
+                    window.location.replace("https://www.google.com");
 
                 }
             };
@@ -99,7 +103,7 @@
                         <label for="check"><span class="icon"></span> Keep me Signed in</label>
                     </div>
                     <div class="group">
-                        <button class="button" onclick="Login()">Sign in</button>
+                        <button id="signin_button" class="button" onclick="Login()">Sign in</button>
                     </div>
                     <div class="hr"></div>
                     <div class="foot-lnk">
@@ -124,7 +128,7 @@
                         <input id="email" type="text" class="input">
                     </div>
                     <div class="group">
-                        <button class="button" onclick="signUp()">Sign up</button>
+                        <button id="signup_button" class="button" onclick="signUp()">Sign up</button>
                     </div>
                     <div class="hr"></div>
                     <div class="foot-lnk">
