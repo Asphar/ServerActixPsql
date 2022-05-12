@@ -7,10 +7,12 @@ mod schema;
 mod auth;
 mod errors;
 
+use openssl::{ssl::{SslAcceptor, SslFiletype, SslMethod}, pkey::PKey, x509::X509};
 use actix_web::{dev::ServiceRequest, App, HttpServer, web, middleware, Error};
 use diesel::r2d2::{self, ConnectionManager};
 use diesel::pg::PgConnection;
 use tracing::{info, instrument};
+use actix_session::CookieSession;
 
 use actix_web_httpauth::extractors::bearer::{BearerAuth, Config};
 use actix_web_httpauth::extractors::AuthenticationError;
@@ -44,6 +46,11 @@ async fn validator(req: ServiceRequest, credentials: BearerAuth) -> Result<Servi
 async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
 
+    let mut builder = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
+    builder.set_private_key_file("key.pem", SslFiletype::PEM).unwrap();
+    builder.set_certificate_chain_file("cert.pem").unwrap();
+
+
     let host = std::env::var("HOST")
     .expect("Host configuation");
 
@@ -57,25 +64,48 @@ async fn main() -> std::io::Result<()> {
         .build(ConnectionManager::<PgConnection>::new(database_url))
         .expect("could not build connection pool");
 
-    info!("Starting server at http://{}:{}/", host, port);
+    info!("Starting server at https://{}:{}/", host, port);
+
+    let mut url: String = "https://".to_owned();
+
+    url.push_str(&host);
+    url.push_str(":");
+    url.push_str(&port);
+    url.push_str("/");
 
     HttpServer::new(move || {
+        // JWT Token implementation
         // let auth = HttpAuthentication::bearer(validator);
         App::new()
             .data(database_pool.clone())
             // .wrap(auth)
             .wrap(middleware::Logger::default())
-            .wrap(middleware::Logger::new("%a %{User-Agent}i"))
+            
+            .wrap(
+                CookieSession::signed(&[0; 32])
+                    .domain(url.as_str())
+                    .name("auth")
+                    .secure(false)
+            )
+            
+            // Assets
             .route("/", web::get().to(routes::home))
+            .route("/profile.html", web::get().to(routes::profile))
             .route("/home.css", web::get().to(routes::css_home))
-            // On addlink HTTP Response redirect users on the user page 
 
+            // Users registration
+            .route("/adduser", web::post().to(routes::add_user))
+            .route("/getusers", web::get().to(routes::get_users))
+            .route("/users/{id}", web::delete().to(routes::delete_user))
+            .route("/users/{id}", web::get().to(routes::get_user_by_id))
 
-            .route("/addlink", web::post().to(routes::add_link))
-            .route("/getlinks", web::get().to(routes::get_links))
-    })
+            // Users authentication
+            .route("/login",web::post().to(routes::log_user))
+            
+    })  
 
-    .bind(format!("{}:{}", host, port))?
+    //.bind_openssl(format!("{}:{}", host, port), builder)?
+    .bind_openssl(format!("{}:{}", host, port), builder)?
     .run()
     .await?;
     

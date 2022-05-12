@@ -15,10 +15,10 @@
                   
               // Creating a XHR object
               let xhr = new XMLHttpRequest();
-              let url = "/getlinks";
+              let url = "/login";
            
               // open a connection
-              xhr.open("GET", url, true);
+              xhr.open("POST", url, true);
      
               // Set the request header i.e. which type of content you are sending
               xhr.setRequestHeader("Content-Type", "application/json");
@@ -29,7 +29,7 @@
      
                       // Print received data from server
                       // result.innerHTML = this.responseText;
-                      window.location.replace("https://www.google.com");
+                      window.location.replace("user/"+xhr.responseText);
      
                   }
               };
@@ -55,7 +55,7 @@
                 
             // Creating a XHR object
             let xhr = new XMLHttpRequest();
-            let url = "/addlink";
+            let url = "/adduser";
          
             // open a connection
             xhr.open("POST", url, true);
@@ -65,10 +65,10 @@
    
             // Create a state change callback
             xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
+                if (xhr.readyState === 4 && xhr.status === 201) {
    
                     // Print received data from server
-                    window.location.replace("https://www.google.com");
+                    window.location.replace("user/"+xhr.responseText);
 
                 }
             };

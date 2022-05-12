@@ -22,3 +22,25 @@ pub struct UserJson {
     pub username: String,
     pub passwd: String
 }
+
+
+#[derive(Debug, Serialize, Deserialize, Queryable)]
+pub struct Session {
+    pub uid: String,
+    pub id_user: i32,
+    pub date_created: String
+}
+
+#[derive(Debug, Insertable)]
+#[table_name = "session"]
+pub struct SessionNew<'a> {
+    pub uid: &'a str,
+    pub id_user: i32,
+    pub date_created: &'a str
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SessionJson {
+    pub username: String,
+    pub passwd: String
+}
