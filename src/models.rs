@@ -26,6 +26,7 @@ pub struct UserJson {
 
 #[derive(Debug, Serialize, Deserialize, Queryable)]
 pub struct Session {
+    pub id_session: i32,
     pub uid: String,
     pub id_user: i32,
     pub date_created: String
@@ -35,7 +36,7 @@ pub struct Session {
 #[table_name = "session"]
 pub struct SessionNew<'a> {
     pub uid: &'a str,
-    pub id_user: i32,
+    pub id_users: i32,
     pub date_created: &'a str
 }
 

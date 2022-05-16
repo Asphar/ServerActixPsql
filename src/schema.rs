@@ -1,7 +1,8 @@
 table! {
-    session (uid) {
+    session (id_session) {
+        id_session -> Int4,
         uid -> Text,
-        id_user -> Int4,
+        id_users -> Int4,
         date_created -> Text,
     }
 }
@@ -15,7 +16,7 @@ table! {
     }
 }
 
-joinable!(session -> users (id_user));
+joinable!(session -> users (id_users));
 
 allow_tables_to_appear_in_same_query!(
     session,

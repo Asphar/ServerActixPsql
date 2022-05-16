@@ -1,5 +1,6 @@
 #[macro_use]
 extern crate diesel;
+extern crate dotenv;
 
 mod routes;
 mod models;
@@ -7,6 +8,7 @@ mod schema;
 mod auth;
 mod errors;
 
+#[allow(unused_imports)]
 use openssl::{ssl::{SslAcceptor, SslFiletype, SslMethod}, pkey::PKey, x509::X509};
 use actix_web::{dev::ServiceRequest, App, HttpServer, web, middleware, Error};
 use diesel::r2d2::{self, ConnectionManager};
@@ -72,7 +74,7 @@ async fn main() -> std::io::Result<()> {
     url.push_str(":");
     url.push_str(&port);
     url.push_str("/");
-
+    
     HttpServer::new(move || {
         // JWT Token implementation
         // let auth = HttpAuthentication::bearer(validator);

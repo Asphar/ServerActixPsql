@@ -8,14 +8,28 @@ use super::schema::users::dsl::*;
 // use diesel::result::DatabaseErrorInformation;
 use uuid::Uuid;
 
+
 #[allow(unused_imports)]
+
 use cipher::{sha_512, argon2};
 use actix_web::{Error, HttpResponse, web};
 use actix_web::http::{StatusCode};
 use diesel::RunQueryDsl;
-use diesel::dsl::{delete, insert_into};
+use diesel::dsl::{delete, insert_into, count};
 use diesel::prelude::*;
 use anyhow::Result;
+use dotenv::dotenv;
+use std::env;
+
+pub fn establish_connection() -> PgConnection {
+    dotenv().ok();
+
+    let database_url = env::var("DATABASE_URL")
+        .expect("DATABASE_URL must be set");
+    PgConnection::establish(&database_url)
+        .expect(&format!("Error connecting to {}", database_url))
+}
+
 
 pub async fn home() -> Result<HttpResponse, Error> {
     Ok(
@@ -84,7 +98,7 @@ fn add_single_user(
                 insert_into(users)
                     .values(&new_user)
                     .execute(&db_connection)
-                    .expect("Error saving new link");
+                    .expect("Error saving new user");
 
                 let result = users.order(id_user.desc())
                     .first(&db_connection).unwrap();
@@ -93,6 +107,7 @@ fn add_single_user(
         }
 }
 
+// Log in a session if uuid exist otherwise create a session 
 
 pub async fn log_user(
     pool: web::Data<Pool>,
@@ -125,18 +140,27 @@ fn log_single_user(
                 match connect_user {
                     Ok(id) => { 
                         let uuid = Uuid::new_v4().to_string();
+                        // SELECT uid FROM session WHERE id_user = id
+
+
                         let new_session = SessionNew {
   
                             uid: &format!("{}", uuid),
                             // cookie: &item.cookie ? sent in Json asynchronously,
-                            id_user: id,
+                            id_users: id,
                             date_created: &format!("{}", chrono::Local::now().naive_local())
                         };
+                        
+                        delete(session.filter(id_users.eq(id)))
+                        .execute(&db_connection)
+                        .expect("Error on delete");
+                        
+
                         insert_into(session)
                         .values(&new_session)
                         //.values((uid.eq(Uuid::new_v4()), id_user.eq(id), date_created.eq(&format!("{}", chrono::Local::now().naive_local()))))
                         .execute(&db_connection)
-                        .expect("Error saving new link");
+                        .expect("Error saving new session");
                         users.filter(id_user.eq(id))
                         .get_result::<User>(&db_connection).map(|_| uuid)
                         }

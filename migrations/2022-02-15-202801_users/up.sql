@@ -7,9 +7,10 @@ CREATE TABLE users (
 );
 
 CREATE TABLE session (
-    uid TEXT PRIMARY KEY,
-    id_user INTEGER NOT NULL,
+    id_session SERIAL PRIMARY KEY, 
+    uid TEXT NOT NULL,
+    id_users INTEGER UNIQUE NOT NULL,
     date_created TEXT NOT NULL, 
 
-    FOREIGN KEY(id_user) REFERENCES users(id_user)
+    FOREIGN KEY(id_users) REFERENCES users(id_user)
 );
