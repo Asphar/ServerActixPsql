@@ -9,8 +9,9 @@ mod auth;
 mod errors;
 
 #[allow(unused_imports)]
+use tera::{Tera, Context};
 use openssl::{ssl::{SslAcceptor, SslFiletype, SslMethod}, pkey::PKey, x509::X509};
-use actix_web::{dev::ServiceRequest, App, HttpServer, web, middleware, Error};
+use actix_web::{dev::ServiceRequest, App, HttpServer, HttpResponse, web, middleware, Error, Responder};
 use diesel::r2d2::{self, ConnectionManager};
 use diesel::pg::PgConnection;
 use tracing::{info, instrument};
@@ -19,6 +20,8 @@ use actix_session::CookieSession;
 use actix_web_httpauth::extractors::bearer::{BearerAuth, Config};
 use actix_web_httpauth::extractors::AuthenticationError;
 use actix_web_httpauth::middleware::HttpAuthentication;
+
+use crate::models::User;
 
 pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
 
@@ -66,6 +69,7 @@ async fn main() -> std::io::Result<()> {
         .build(ConnectionManager::<PgConnection>::new(database_url))
         .expect("could not build connection pool");
 
+
     info!("Starting server at https://{}:{}/", host, port);
 
     let mut url: String = "https://".to_owned();
@@ -74,11 +78,28 @@ async fn main() -> std::io::Result<()> {
     url.push_str(":");
     url.push_str(&port);
     url.push_str("/");
-    
+
+    // Create a while loop to check on the data received from the database
+    /*
+    While 1 {
+        println("debug");
+        let update_session = session
+        .select(date_created)
+        .filter(date_created.eq(date_created))
+        .expect("Error on data time")
+        .get_result::<i32>
+        .
+
+    }
+    */
+
     HttpServer::new(move || {
         // JWT Token implementation
         // let auth = HttpAuthentication::bearer(validator);
+
+        let tera = Tera::new("templates/**/*").unwrap();
         App::new()
+            .data(tera)
             .data(database_pool.clone())
             // .wrap(auth)
             .wrap(middleware::Logger::default())
@@ -103,6 +124,9 @@ async fn main() -> std::io::Result<()> {
 
             // Users authentication
             .route("/login",web::post().to(routes::log_user))
+
+            
+            .route("/user/{id}", web::get().to(routes::index))
             
     })  
 

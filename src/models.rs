@@ -1,3 +1,5 @@
+use std::time::SystemTime;
+
 use serde::{Deserialize, Serialize};
 use crate::schema::*;
 
@@ -14,7 +16,7 @@ pub struct User {
 pub struct UserNew<'a> {
     pub username: &'a str,
     pub passwd: &'a str,
-    pub date_created: &'a str
+    pub date_created: SystemTime
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -29,7 +31,7 @@ pub struct Session {
     pub id_session: i32,
     pub uid: String,
     pub id_user: i32,
-    pub date_created: String
+    pub timestamp: String
 }
 
 #[derive(Debug, Insertable)]
@@ -37,7 +39,7 @@ pub struct Session {
 pub struct SessionNew<'a> {
     pub uid: &'a str,
     pub id_users: i32,
-    pub date_created: &'a str
+    pub timestamp: SystemTime
 }
 
 #[derive(Debug, Serialize, Deserialize)]

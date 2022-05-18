@@ -1,11 +1,21 @@
-FROM rust:latest as build
+FROM rust:1.59.0 as builder
 
-WORKDIR /usr/src/shield_factory
-
+RUN mkdir /usr/src/rustwebservice
+WORKDIR /usr/src/rustwebservice
 COPY . .
 
-RUN cargo install --path .
+RUN rustup default nightly
+RUN cargo build --release
 
-FROM alpine:latest
+EXPOSE 8000
 
-CMD ["cargo run"]
+FROM gcr.io/distroless/cc-debian11
+
+
+COPY --from=builder /home/kali/Desktop/Shield_website/DataGit/ServerActixPsql/target/debug/demo /usr/src/rustwebservice/
+
+WORKDIR /usr/src/rustwebservice
+
+EXPOSE 8000
+
+CMD ["./demo"]

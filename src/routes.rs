@@ -9,10 +9,13 @@ use super::schema::users::dsl::*;
 use uuid::Uuid;
 
 
+use std::ops::Add;
 #[allow(unused_imports)]
-
+use std::time::Duration;
+use std::time::SystemTime;
+use tera::{Tera, Context};
 use cipher::{sha_512, argon2};
-use actix_web::{Error, HttpResponse, web};
+use actix_web::{Error, HttpResponse, web, Responder};
 use actix_web::http::{StatusCode};
 use diesel::RunQueryDsl;
 use diesel::dsl::{delete, insert_into, count};
@@ -44,7 +47,7 @@ pub async fn profile() -> Result<HttpResponse, Error> {
     Ok(
         HttpResponse::build(StatusCode::OK)
             .content_type("text/html; charset=utf-8")
-            .body(include_str!("../templates/profile.html"))
+            .body(include_str!("../templates/profile.html.tera"))
         
     )
 }
@@ -91,8 +94,8 @@ fn add_single_user(
                     username: &item.username,
                     //passwd: &item.passwd,
                     passwd: &format!("{}", &item.passwd),
-                    date_created: &format!("{}", chrono::Local::now()
-                        .naive_local())
+                    date_created: SystemTime::now()
+                       
                 };
                 
                 insert_into(users)
@@ -107,7 +110,31 @@ fn add_single_user(
         }
 }
 
-// Log in a session if uuid exist otherwise create a session 
+
+pub async fn index(
+    pool: web::Data<Pool>,
+    tera: web::Data<Tera>, 
+    uuid: web::Path<(String, )>
+) -> impl Responder {
+
+    let mut data = Context::new();
+    let db_connection = pool.get().unwrap();
+    let db_username: String = users
+    .select(username)
+    .inner_join(session)
+    .filter(uid.eq(uuid.0.to_string()))
+    .filter(timestamp.gt(SystemTime::now().add(Duration::new(3600, 0))))
+    .get_result::<String>(&db_connection)
+    .expect("Error on template");
+
+    data.insert("title", "Shield Factory");
+    data.insert("name",&db_username);
+
+    let rendered = tera.render("profile.html", &data).unwrap();
+    HttpResponse::Ok().body(rendered)
+}
+
+
 
 pub async fn log_user(
     pool: web::Data<Pool>,
@@ -128,47 +155,47 @@ fn log_single_user(
     use crate::schema::users::dsl::*;
     let db_connection = pool.get().unwrap();
 
-                // Select passwd From users Where username = ""
-                let connect_user = users
-                .select(id_user)
-                .filter(passwd.eq(&item.passwd))
-                .filter(username.eq(&item.username))
-                .get_result::<i32>(&db_connection);
+        // Select passwd From users Where username = ""
+        let connect_user = users
+        .select(id_user)
+        .filter(passwd.eq(&item.passwd))
+        .filter(username.eq(&item.username))
+        .get_result::<i32>(&db_connection);
 
-                
-                // If Select return <(String, String)> log in user : 
-                match connect_user {
-                    Ok(id) => { 
-                        let uuid = Uuid::new_v4().to_string();
-                        // SELECT uid FROM session WHERE id_user = id
-
-
-                        let new_session = SessionNew {
-  
-                            uid: &format!("{}", uuid),
-                            // cookie: &item.cookie ? sent in Json asynchronously,
-                            id_users: id,
-                            date_created: &format!("{}", chrono::Local::now().naive_local())
-                        };
-                        
-                        delete(session.filter(id_users.eq(id)))
-                        .execute(&db_connection)
-                        .expect("Error on delete");
-                        
-
-                        insert_into(session)
-                        .values(&new_session)
-                        //.values((uid.eq(Uuid::new_v4()), id_user.eq(id), date_created.eq(&format!("{}", chrono::Local::now().naive_local()))))
-                        .execute(&db_connection)
-                        .expect("Error saving new session");
-                        users.filter(id_user.eq(id))
-                        .get_result::<User>(&db_connection).map(|_| uuid)
-                        }
-
-                    Err(e) => Err(e)
-                }
-            
         
+        // If Select return <(String, String)> log in user : 
+        match connect_user {
+            Ok(id) => { 
+                let uuid = Uuid::new_v4().to_string();
+
+                let new_session = SessionNew {
+
+                    uid: &format!("{}", uuid),
+                    // cookie: &item.cookie ? sent in Json asynchronously,
+                    id_users: id,
+                    timestamp: SystemTime::now()
+                };
+
+                // Log in a session if uuid exist otherwise create a session 
+                
+                delete(session.filter(id_users.eq(id)))
+                .execute(&db_connection)
+                .expect("Error on delete");
+            
+
+                insert_into(session)
+                .values(&new_session)
+                //.values((uid.eq(Uuid::new_v4()), id_user.eq(id), date_created.eq(&format!("{}", chrono::Local::now().naive_local()))))
+                .execute(&db_connection)
+                .expect("Error saving new session");
+                users.filter(id_user.eq(id))
+                .get_result::<User>(&db_connection).map(|_| uuid)
+                }
+
+            Err(e) => Err(e)
+        }
+    
+
 }
 
 

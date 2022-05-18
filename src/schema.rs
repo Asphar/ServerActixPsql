@@ -3,7 +3,7 @@ table! {
         id_session -> Int4,
         uid -> Text,
         id_users -> Int4,
-        date_created -> Text,
+        timestamp -> Timestamp,
     }
 }
 
@@ -12,7 +12,7 @@ table! {
         id_user -> Int4,
         username -> Text,
         passwd -> Text,
-        date_created -> Text,
+        date_created -> Timestamp,
     }
 }
 
