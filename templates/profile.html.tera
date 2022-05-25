@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="images/x-icon" href="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/logo_url.ico?raw=true">
     
     <title>{{title}}</title>
 
@@ -231,9 +232,12 @@
 
             data = JSON.stringify({"public_key": publicKey});
             xhr.send(data);
-            
         }
 
+        
+
     </script>
+
+
 </body>
 </html>

@@ -1,0 +1,264 @@
+
+/* Style for the top of the page */
+.talk-box {
+    margin-top: 20%;
+}
+
+
+.button img {
+    width: 60px;
+}
+
+.button {
+    margin-left: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    color: deeppink;
+    font-size: 3rem;
+}
+
+.button:hover{
+    box-shadow: -20px 0px 100px 1px rgb(187, 52, 142), 20px 0px 100px 1px rgb(74, 27, 134);
+}
+
+.talk {
+    display: flex;
+    align-items: center;
+    height: 10%;
+}
+
+.desc {
+    top: 0px;
+    text-align: left;
+    color: lightgray;
+    width: 50vh;
+}
+
+#container h1 {
+    font-size: 4vw;
+    color: #fff;
+    margin-top: -10%;
+    text-shadow: 5px 0px 5px rgb(187, 52, 142);
+    vertical-align: middle;
+}
+
+#container h2 {
+    text-align: left;
+    margin-top: 2%;
+    text-align: left;
+    font-size: 3vw;
+    color: #fff;
+}
+
+h2 {
+    text-align: center;
+}
+h3 {
+    text-align: center;
+}
+
+#container {
+    position: relative;
+    width: 100%;
+    height: 92vh;
+    display: flex;
+
+    align-items: center;
+    flex-direction: column;
+    background: url(https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/sf.png?raw=true);
+    background-size: cover;
+}
+
+
+
+.wave::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    padding-top: 12%;
+    top: -5px;
+    left: 0;
+    background-image: url(https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/wave.png?raw=true);
+    background-repeat: repeat-x;
+    background-size: 100%;
+    opacity: .2;
+    animation: wave-reverse 8s linear infinite;
+}
+
+.wave::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    padding-top: 12%;
+    top: -5px;
+    left: 0;
+    background-image: url(https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/wave.png?raw=true);
+    background-repeat: repeat-x;
+    background-size: 100%;
+    opacity: .8;
+    animation-delay: -4s;
+    animation: wave 16s linear infinite;
+}
+
+/* Animation with keyframes */
+@keyframes wave {
+    0% {
+        background-position: 0;
+    }
+
+    100% {
+        background-position: 100vw;
+    }
+}
+
+@keyframes wave-reverse {
+    0% {
+        background-position: 100vw;
+    }
+
+    100% {
+        background-position: 0;
+    }
+}
+
+/* Style for the middle page */
+.middle-page {
+    margin-top: 5%;
+    margin-bottom: 5%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.middle-page img {
+    width: 70%;
+    height: 70%;
+    margin-right: 40%;
+}
+
+.middle-page .text {
+    display: flex;
+    margin-left: 63%;
+    align-items: center;
+    width: 150%;
+    text-align: center;
+}
+
+.middle-page .bold {
+    font-size: 2rem;
+    font-weight: 800;
+    width: 250vh;
+    margin: 50px;
+}
+
+.middle-page p {
+    font-size: 1.2rem;
+    margin: 50px;
+}
+
+/* End of the page */
+
+.end-page {
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+}
+
+.end-page .text {
+    margin-right: 50px;
+}
+
+.end-page .text p {
+    text-align: left;
+    font-weight: 800;
+    font-size: 1.5rem;
+    width: 50vh;
+}
+
+.end-page a {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: lightgreen;
+    width: 30vh;
+    height: 5vh;
+    border-radius: 30px;
+    color: white;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.end-page a:hover {
+    background-color: #42b983;
+}
+
+.end-page img {
+    height: 50vh;
+}
+
+/* Footer */
+footer {
+    margin-top: 5%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 20vh;
+    background-color: black;
+    font-size: 1.5rem;
+    color: white;
+}
+
+footer img {
+    width: 150px;
+}
+
+/* Mobile version */
+@media screen and (max-width: 640px) {
+    #container {
+        height: 90vh;
+    }
+
+    #container h2 {
+        font-size: 0.7rem;
+    }
+
+    .button {
+        height: 60px;
+        width: 60px;
+        font-size: 1.5rem;
+    }
+
+    .talk-box {
+        margin-top: 50%;
+    }
+
+    /* middle page */
+    .middle-page .text {
+        zoom: 0.5;
+        width: 95%;
+    }
+
+    .middle-page .bold {
+        font-size: 1.5rem;
+    }
+
+    .middle-page p {
+        font-size: 1rem;
+    }
+
+    /* end of the page */
+    .end-page {
+        zoom: 0.4;
+    }
+
+    /* footer */
+    footer {
+        zoom: 0.4;
+    }
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="images/x-icon" href="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/logo_url.ico?raw=true">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./header.css">
+    <link rel="stylesheet" href="./home.css">
+
+    <title>Key generation</title>
+
+</head>
+<body>
+    <link rel="stylesheet" href="../css/key_generator.css">
+    <link rel="icon" type="images/x-icon" href="../img/logo_url.ico">
+
+    <div id="nav">
+
+
+        <div class="logo">
+            <img src="../img/shield.PNG">
+            <h1 class="titre">Shield Factory</h1>
+        </div>
+        <div class="links">
+
+            <a href="./connexion_reussie.html">Home</a>
+            <a href="./tutoriel.html">Tutoriel</a>
+            <a href="./key_generator.html">Generation des clefs</a>
+            <a href="./vpns.html">VPNs</a>
+        </div>
+    </div>
+</body>

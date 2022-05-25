@@ -14,7 +14,7 @@ use openssl::{ssl::{SslAcceptor, SslFiletype, SslMethod}, pkey::PKey, x509::X509
 use actix_web::{dev::ServiceRequest, App, HttpServer, HttpResponse, web, middleware, Error, Responder};
 use diesel::r2d2::{self, ConnectionManager};
 use diesel::pg::PgConnection;
-use tracing::{info, instrument};
+use tracing::{info, instrument, field};
 use actix_session::CookieSession;
 
 use actix_web_httpauth::extractors::bearer::{BearerAuth, Config};
@@ -45,7 +45,7 @@ async fn validator(req: ServiceRequest, credentials: BearerAuth) -> Result<Servi
     }
 }
 
-
+#[allow(dead_code)]
 #[actix_rt::main]
 #[instrument]
 async fn main() -> std::io::Result<()> {
@@ -70,28 +70,21 @@ async fn main() -> std::io::Result<()> {
         .expect("could not build connection pool");
 
 
-    info!("Starting server at https://{}:{}/", host, port);
+    let addr = std::net::Ipv4Addr::new(127, 0, 0, 1);
+
+
+    info!("Starting server at https://{}:{}/", addr, port);
 
     let mut url: String = "https://".to_owned();
+
 
     url.push_str(&host);
     url.push_str(":");
     url.push_str(&port);
     url.push_str("/");
 
-    // Create a while loop to check on the data received from the database
-    /*
-    While 1 {
-        println("debug");
-        let update_session = session
-        .select(date_created)
-        .filter(date_created.eq(date_created))
-        .expect("Error on data time")
-        .get_result::<i32>
-        .
-
-    }
-    */
+    let mut url2 = url.clone();
+    url2.push_str("*");
 
     HttpServer::new(move || {
         // JWT Token implementation
@@ -106,31 +99,48 @@ async fn main() -> std::io::Result<()> {
             
             .wrap(
                 CookieSession::signed(&[0; 32])
-                    .domain(url.as_str())
-                    .name("auth")
-                    .secure(false)
+                  .domain(url2.as_str())
+                  .name("PHPSESSID")
+                  .secure(false)
             )
             
-            // Assets
-            .route("/", web::get().to(routes::home))
-            .route("/profile.html", web::get().to(routes::profile))
-            .route("/home.css", web::get().to(routes::css_home))
+            
 
-            // Users registration
+            // Home route 
+            .route("/", web::get().to(routes::home))
+            .route("/auth.html", web::get().to(routes::auth))
+            
+            // Profile not needed as Tera already charged the profile 
+            //.route("/profile.html", web::get().to(routes::profile))
+
+
+            // Assets route
+            .route("/auth.css", web::get().to(routes::css_auth))
+            .route("/home.css", web::get().to(routes::css_home))
+            .route("/style.css", web::get().to(routes::css_style))
+            .route("/header.css", web::get().to(routes::css_header))
+            
+
+            // User API
             .route("/adduser", web::post().to(routes::add_user))
             .route("/getusers", web::get().to(routes::get_users))
             .route("/users/{id}", web::delete().to(routes::delete_user))
             .route("/users/{id}", web::get().to(routes::get_user_by_id))
 
-            // Users authentication
+            // User authentication
             .route("/login",web::post().to(routes::log_user))
 
+            // User session
+            .route("/user/profile/{id}", web::get().to(routes::profile))
             
-            .route("/user/{id}", web::get().to(routes::index))
+            // Management page
+            .route("/user/index/{id}", web::get().to(routes::index))
             
+            .route("/mail", web::get().to(routes::data_mail))
+            //.route("/user/{id}")
     })  
 
-    //.bind_openssl(format!("{}:{}", host, port), builder)?
+    //.bind(format!("{}:{}", host, port))?
     .bind_openssl(format!("{}:{}", host, port), builder)?
     .run()
     .await?;

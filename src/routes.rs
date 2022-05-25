@@ -1,3 +1,7 @@
+//use rusoto_ses::SesClient;
+use lettre::transport::smtp::authentication::Credentials;
+use lettre::{Message, SmtpTransport, Transport};
+
 use crate::Pool;
 use crate::models::{User, UserJson, UserNew};
 use crate::models::{Session, SessionNew, SessionJson};
@@ -10,6 +14,7 @@ use uuid::Uuid;
 
 
 use std::ops::Add;
+
 #[allow(unused_imports)]
 use std::time::Duration;
 use std::time::SystemTime;
@@ -24,25 +29,28 @@ use anyhow::Result;
 use dotenv::dotenv;
 use std::env;
 
-pub fn establish_connection() -> PgConnection {
-    dotenv().ok();
-
-    let database_url = env::var("DATABASE_URL")
-        .expect("DATABASE_URL must be set");
-    PgConnection::establish(&database_url)
-        .expect(&format!("Error connecting to {}", database_url))
-}
 
 
 pub async fn home() -> Result<HttpResponse, Error> {
     Ok(
         HttpResponse::build(StatusCode::OK)
             .content_type("text/html; charset=utf-8")
-            .body(include_str!("../templates/index.html"))
+            .body(include_str!("../templates/home.html"))
         
     )
 }
 
+
+pub async fn auth() -> Result<HttpResponse, Error> {
+    Ok(
+        HttpResponse::build(StatusCode::OK)
+            .content_type("text/html; charset=utf-8")
+            .body(include_str!("../templates/auth.html"))
+        
+    )
+}
+
+/* 
 pub async fn profile() -> Result<HttpResponse, Error> {
     Ok(
         HttpResponse::build(StatusCode::OK)
@@ -51,12 +59,44 @@ pub async fn profile() -> Result<HttpResponse, Error> {
         
     )
 }
+*/
+
+
+pub async fn css_auth() -> Result<HttpResponse, Error> {
+    Ok(
+        HttpResponse::build(StatusCode::OK)
+            .content_type("text/css; charset=utf-8")
+            .body(include_str!("../templates/css/auth.css"))
+        
+    )
+}
+
 
 pub async fn css_home() -> Result<HttpResponse, Error> {
     Ok(
         HttpResponse::build(StatusCode::OK)
             .content_type("text/css; charset=utf-8")
-            .body(include_str!("../templates/home.css"))
+            .body(include_str!("../templates/css/home.css"))
+        
+    )
+}
+
+
+pub async fn css_header() -> Result<HttpResponse, Error> {
+    Ok(
+        HttpResponse::build(StatusCode::OK)
+            .content_type("text/css; charset=utf-8")
+            .body(include_str!("../templates/css/header.css"))
+        
+    )
+}
+
+
+pub async fn css_style() -> Result<HttpResponse, Error> {
+    Ok(
+        HttpResponse::build(StatusCode::OK)
+            .content_type("text/css; charset=utf-8")
+            .body(include_str!("../templates/css/style.css"))
         
     )
 }
@@ -111,6 +151,32 @@ fn add_single_user(
 }
 
 
+pub async fn profile(
+    pool: web::Data<Pool>,
+    tera: web::Data<Tera>, 
+    uuid: web::Path<(String, )>
+) -> impl Responder {
+
+    let mut data = Context::new();
+    let db_connection = pool.get().unwrap();
+
+    // Provide template username
+    let db_username: String = users
+    .select(username)
+    .inner_join(session)
+    .filter(uid.eq(uuid.0.to_string()))
+    .filter(timestamp.lt(SystemTime::now().add(Duration::new(3600, 0))))
+    .get_result::<String>(&db_connection)
+    .expect("Error on template");
+
+    data.insert("title", "Shield Factory");
+    data.insert("name",&db_username);
+
+    let rendered = tera.render("profile.html.tera", &data).unwrap();
+    HttpResponse::Ok().body(rendered)
+}
+
+
 pub async fn index(
     pool: web::Data<Pool>,
     tera: web::Data<Tera>, 
@@ -119,19 +185,78 @@ pub async fn index(
 
     let mut data = Context::new();
     let db_connection = pool.get().unwrap();
+
+    // Provide template username
     let db_username: String = users
     .select(username)
     .inner_join(session)
     .filter(uid.eq(uuid.0.to_string()))
-    .filter(timestamp.gt(SystemTime::now().add(Duration::new(3600, 0))))
+    .filter(timestamp.lt(SystemTime::now().add(Duration::new(3600, 0))))
     .get_result::<String>(&db_connection)
     .expect("Error on template");
 
     data.insert("title", "Shield Factory");
     data.insert("name",&db_username);
 
-    let rendered = tera.render("profile.html", &data).unwrap();
+    let rendered = tera.render("index.html.tera", &data).unwrap();
     HttpResponse::Ok().body(rendered)
+}
+
+
+pub async fn data_mail() -> Result<HttpResponse, Error> {
+
+    let from = "David NGUYEN <david.nguyen@isen.yncrea.fr>";
+
+    // Replace the mail with database input mail
+    // let to = "Username <&mail>"
+    let to = "Thibault DEMASI <thibault.demasi@isen.yncrea.fr>";
+    let subject = "Hello World";
+
+    /* 
+    let db_connection = pool.get().unwrap();
+
+    // Provide template username
+    let db_body: String = session
+    .select(uid)
+    .inner_join(users)
+    .filter(uid.eq(uuid.0.to_string()))
+    .get_result::<String>(&db_connection)
+    .expect("Error on template");
+
+    */
+    // Replace the body with the mail of the user
+    let body = "test".to_string();
+
+    send_email_ses(from, to, subject, body).await.expect("Error on mail !");
+    Ok(HttpResponse::Ok().finish())
+}
+
+
+async fn send_email_ses(
+    from: &str,
+    to: &str,
+    subject: &str,
+    body: String,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let email = Message::builder()
+        .from(from.parse()?)
+        .to(to.parse()?)
+        .subject(subject)
+        .body(body.to_string())?;
+
+    let creds = Credentials::new("shield.factory.isen".to_string(), "ShieldFactoryISEN".to_string());
+    
+
+    let mailer = SmtpTransport::relay("smtp.gmail.com")
+        .unwrap()
+        .credentials(creds)
+        .build();
+
+    match mailer.send(&email) {
+        Ok(_) => println!("Email sent successfully!"),
+        Err(e) => panic!("Could not send email: {:?}", e),
+    }
+    Ok(())
 }
 
 
@@ -176,8 +301,7 @@ fn log_single_user(
                     timestamp: SystemTime::now()
                 };
 
-                // Log in a session if uuid exist otherwise create a session 
-                
+                // Log in a session if uuid exist otherwise create a session
                 delete(session.filter(id_users.eq(id)))
                 .execute(&db_connection)
                 .expect("Error on delete");
@@ -199,8 +323,9 @@ fn log_single_user(
 }
 
 
-# [warn(unused)]
 
+
+# [warn(unused)]
 pub async fn get_users(
     pool: web::Data<Pool>
 ) -> Result<HttpResponse, Error> {

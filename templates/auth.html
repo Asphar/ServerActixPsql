@@ -7,38 +7,38 @@
     <script type="text/javascript">
         function Login(){
               
-              let result = document.querySelector('.result');
-              let user = document.querySelector('#user_sign_in');
-              let password = document.querySelector('#pass_sign_in');
-              const link = document.querySelector('#signin_button');
+                let result = document.querySelector('.result');
+                let user = document.querySelector('#user_sign_in');
+                let password = document.querySelector('#pass_sign_in');
+                const link = document.querySelector('#signin_button');
 
-                  
-              // Creating a XHR object
-              let xhr = new XMLHttpRequest();
-              let url = "/login";
-           
-              // open a connection
-              xhr.open("POST", url, true);
-     
-              // Set the request header i.e. which type of content you are sending
-              xhr.setRequestHeader("Content-Type", "application/json");
-     
-              // Create a state change callback
-              xhr.onreadystatechange = function () {
-                  if (xhr.readyState === 4 && xhr.status === 200) {
-     
-                      // Print received data from server
-                      // result.innerHTML = this.responseText;
-                      window.location.replace("user/"+xhr.responseText);
-     
-                  }
-              };
-     
-              // Converting JSON data to string
-              var data = JSON.stringify({ "username": user.value, "passwd": password.value });
-     
-              // Sending data with the request
-              xhr.send(data);
+                    
+                // Creating a XHR object
+                let xhr = new XMLHttpRequest();
+                let url = "/login";
+
+                // open a connection
+                xhr.open("POST", url, true);
+        
+                // Set the request header i.e. which type of content you are sending
+                xhr.setRequestHeader("Content-Type", "application/json");
+        
+                // Create a state change callback
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+        
+                        // Print received data from server
+                        // result.innerHTML = this.responseText;
+                        window.location.replace("user/profile/"+xhr.responseText);
+        
+                    }
+                };
+        
+                // Converting JSON data to string
+                var data = JSON.stringify({ "username": user.value, "passwd": password.value });
+        
+                // Sending data with the request
+                xhr.send(data);
             }
 
 
@@ -56,31 +56,47 @@
             // Creating a XHR object
             let xhr = new XMLHttpRequest();
             let url = "/adduser";
-         
+            let mail = "/mail";
+
             // open a connection
             xhr.open("POST", url, true);
-   
+
             // Set the request header i.e. which type of content you are sending
             xhr.setRequestHeader("Content-Type", "application/json");
-   
+        
             // Create a state change callback
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 201) {
    
                     // Print received data from server
                     // window.location.replace("user/"+xhr.responseText);
+                                // Open the port for mailing
+                    xhr.open("GET", mail, true);
+
+                    // Set the request header i.e. which type of content you are sending
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                
+                    // Converting JSON data to string
+                    var data = JSON.stringify({ "Mail": "true" });
+
+                    // Sending data with the request
+                    xhr.send(data);
 
                 }
             };
    
             // Converting JSON data to string
             var data = JSON.stringify({ "username": user.value, "email": email.value, "passwd": password.value, "verif_pass": verif_pass.value });
-   
+
             // Sending data with the request
             xhr.send(data);
+
+
+
           }
     </script>
-    <link rel="stylesheet" href="./home.css">
+    <link rel="icon" type="images/x-icon" href="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/logo_url.ico?raw=true">
+    <link rel="stylesheet" href="/auth.css">
     <title>Document</title>
 </head>
 <body>

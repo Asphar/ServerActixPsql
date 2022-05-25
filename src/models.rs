@@ -8,7 +8,7 @@ pub struct User {
     pub id_user: i32,
     pub username: String,
     pub passwd: String,
-    pub date_create: String
+    pub date_create: SystemTime
 }
 
 #[derive(Debug, Insertable)]
@@ -31,7 +31,7 @@ pub struct Session {
     pub id_session: i32,
     pub uid: String,
     pub id_user: i32,
-    pub timestamp: String
+    pub timestamp: SystemTime
 }
 
 #[derive(Debug, Insertable)]

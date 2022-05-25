@@ -28,8 +28,16 @@ tera = "1.5.0"
 #Sha512
 
 rand = "0.8.4"
-rust-argon2 = "0.8"
 #Argon2
+rust-argon2 = "0.8"
+
+
+#Lettre
+tokio = { version = "1", features = ["full"] }
+rusoto_core = { version = "0.46", default-features = false, features = ["rustls"] }
+rusoto_ses = { version = "0.46", default-features = false, features = ["rustls"] }
+base64 = "0.13"
+lettre = "0.10.0-beta.1"
 
 [dependencies.uuid]
 version = "1.0.0"
