@@ -135,7 +135,9 @@ async fn main() -> std::io::Result<()> {
             // Management page
             .route("/user/index/{id}", web::get().to(routes::index))
             
-            .route("/mail", web::get().to(routes::data_mail))
+            // Handlers
+            .route("/mail", web::post().to(routes::data_mail))
+            .route("/session_user", web::post().to(routes::session_user))
             //.route("/user/{id}")
     })  
 

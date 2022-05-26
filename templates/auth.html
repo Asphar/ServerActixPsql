@@ -57,25 +57,59 @@
             let xhr = new XMLHttpRequest();
             let url = "/adduser";
             let mail = "/mail";
+            let session = "/login"
 
             // open a connection
             xhr.open("POST", url, true);
 
             // Set the request header i.e. which type of content you are sending
             xhr.setRequestHeader("Content-Type", "application/json");
-        
+            
+            
             // Create a state change callback
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 201) {
    
                     // Print received data from server
-                    // window.location.replace("user/"+xhr.responseText);
-                                // Open the port for mailing
-                    xhr.open("GET", mail, true);
+                    //window.location.replace("user/profile/"+xhr.responseText);
+                    xhr.open("POST", session, true);
 
                     // Set the request header i.e. which type of content you are sending
                     xhr.setRequestHeader("Content-Type", "application/json");
-                
+                    
+                    
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            
+                            let uuid = xhr.responseText
+                            console.log(uuid)
+
+                            xhr.open("POST", mail, true);
+
+                            // Set the request header i.e. which type of content you are sending
+                            xhr.setRequestHeader("Content-Type", "application/json");
+                            
+                       
+
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState === 4 && xhr.status === 201) {
+                                    
+                                }
+                            };
+
+                            
+                            // Converting JSON data to string
+                            var data = JSON.stringify({ "username": uuid, "email": email.value, "passwd": password.value, "verif_pass": verif_pass.value });
+
+                            // Sending data with the request
+                            xhr.send(data);
+
+                        }
+                    };
+
+                    let uuid = xhr.responseText
+                    
                     // Converting JSON data to string
                     var data = JSON.stringify({ "username": user.value, "email": email.value, "passwd": password.value, "verif_pass": verif_pass.value });
 
@@ -84,16 +118,18 @@
 
                 }
             };
-   
+
+            let uuid = xhr.responseText
+
             // Converting JSON data to string
+            // var data = JSON.stringify({ "username": user.value, "email": email.value, "passwd": password.value, "verif_pass": verif_pass.value });
             var data = JSON.stringify({ "username": user.value, "email": email.value, "passwd": password.value, "verif_pass": verif_pass.value });
 
             // Sending data with the request
             xhr.send(data);
 
-
-
           }
+
     </script>
     <link rel="icon" type="images/x-icon" href="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/logo_url.ico?raw=true">
     <link rel="stylesheet" href="/auth.css">

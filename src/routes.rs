@@ -30,7 +30,6 @@ use dotenv::dotenv;
 use std::env;
 
 
-
 pub async fn home() -> Result<HttpResponse, Error> {
     Ok(
         HttpResponse::build(StatusCode::OK)
@@ -203,27 +202,25 @@ pub async fn index(
 }
 
 
-pub async fn db_uuid(
-    pool: web::Data<Pool>,
+
+pub async fn data_mail(
     item: web::Json<UserJson>
-) -> String {
+) -> Result<HttpResponse, Error> {
 
-    // Catch diesel uuid value 
-
-    return "uuid".to_string()
-
-}
-
-pub async fn data_mail() -> Result<HttpResponse, Error> {
-
-
-    let from = "David NGUYEN <david.nguyen@isen.yncrea.fr>";
+    //let from: &str = &item.email;
+    let from: &str = &item.passwd;
 
     // Replace the mail with database input mail
     // let to = "Username <&mail>"
     let to = "David NGUYEN <david.nguyen@isen.yncrea.fr>";
-    let subject = "Hello World";
-    let body = "test".to_string();
+    let subject = "Welcome to ShieldFactory";
+
+    let mut body = "https://localhost:8043/user/profile/".to_owned();
+    let borrowed_string: &str = &item.username;
+    
+    body.push_str(borrowed_string);
+    body.push_str("\nYou have been accepted to our ShieldFactory team !");
+    body.push_str("\nFollow the link to access our website.");
 
     send_email_ses(from, to, subject, body).await.expect("Error on mail !");
     
@@ -291,7 +288,7 @@ fn log_single_user(
         match connect_user {
             Ok(id) => { 
                 let uuid = Uuid::new_v4().to_string();
-
+                
                 let new_session = SessionNew {
 
                     uid: &format!("{}", uuid),
@@ -311,6 +308,7 @@ fn log_single_user(
                 //.values((uid.eq(Uuid::new_v4()), id_user.eq(id), date_created.eq(&format!("{}", chrono::Local::now().naive_local()))))
                 .execute(&db_connection)
                 .expect("Error saving new session");
+
                 users.filter(id_user.eq(id))
                 .get_result::<User>(&db_connection).map(|_| uuid)
                 }
@@ -324,7 +322,74 @@ fn log_single_user(
 
 
 
-# [warn(unused)]
+
+
+
+pub async fn session_user(
+    pool: web::Data<Pool>,
+    item: web::Json<UserJson>
+) -> Result<HttpResponse, HttpResponse> {
+  
+        web::block(move || auth_session_user(pool, item))
+            .await
+            .map(|uuid| HttpResponse::Ok().body(uuid))
+            .map_err(|_| HttpResponse::InternalServerError().finish())
+}
+
+
+fn auth_session_user(
+    pool: web::Data<Pool>,
+    item: web::Json<UserJson>
+) -> Result<String, diesel::result::Error> {
+    use crate::schema::users::dsl::*;
+    let db_connection = pool.get().unwrap();
+
+        // Select passwd From users Where username = ""
+        let connect_user = users
+        .select(id_user)
+        .filter(passwd.eq(&item.passwd))
+        .filter(username.eq(&item.username))
+        .get_result::<i32>(&db_connection);
+
+        
+        // If Select return <(String, String)> log in user : 
+        match connect_user {
+            Ok(id) => { 
+                let uuid = Uuid::new_v4().to_string();
+                
+                let new_session = SessionNew {
+
+                    uid: &format!("{}", uuid),
+                    // cookie: &item.cookie ? sent in Json asynchronously,
+                    id_users: id,
+                    timestamp: SystemTime::now()
+                };
+
+                // Log in a session if uuid exist otherwise create a session
+                delete(session.filter(id_users.eq(id)))
+                .execute(&db_connection)
+                .expect("Error on delete");
+            
+
+                insert_into(session)
+                .values(&new_session)
+                //.values((uid.eq(Uuid::new_v4()), id_user.eq(id), date_created.eq(&format!("{}", chrono::Local::now().naive_local()))))
+                .execute(&db_connection)
+                .expect("Error saving new session");
+
+                users.filter(id_user.eq(id))
+                .get_result::<User>(&db_connection).map(|_| uuid)
+                }
+
+            Err(e) => Err(e)
+        }
+    
+
+}
+
+
+
+
 pub async fn get_users(
     pool: web::Data<Pool>
 ) -> Result<HttpResponse, Error> {
