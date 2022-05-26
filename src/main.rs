@@ -99,9 +99,8 @@ async fn main() -> std::io::Result<()> {
             
             .wrap(
                 CookieSession::signed(&[0; 32])
-                  .domain(url2.as_str())
-                  .name("PHPSESSID")
-                  .secure(false)
+                  .domain(url.as_str())
+                  .secure(true)
             )
             
             

@@ -77,7 +77,7 @@
                     xhr.setRequestHeader("Content-Type", "application/json");
                 
                     // Converting JSON data to string
-                    var data = JSON.stringify({ "Mail": "true" });
+                    var data = JSON.stringify({ "username": user.value, "email": email.value, "passwd": password.value, "verif_pass": verif_pass.value });
 
                     // Sending data with the request
                     xhr.send(data);

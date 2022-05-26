@@ -203,31 +203,30 @@ pub async fn index(
 }
 
 
+pub async fn db_uuid(
+    pool: web::Data<Pool>,
+    item: web::Json<UserJson>
+) -> String {
+
+    // Catch diesel uuid value 
+
+    return "uuid".to_string()
+
+}
+
 pub async fn data_mail() -> Result<HttpResponse, Error> {
+
 
     let from = "David NGUYEN <david.nguyen@isen.yncrea.fr>";
 
     // Replace the mail with database input mail
     // let to = "Username <&mail>"
-    let to = "Thibault DEMASI <thibault.demasi@isen.yncrea.fr>";
+    let to = "David NGUYEN <david.nguyen@isen.yncrea.fr>";
     let subject = "Hello World";
-
-    /* 
-    let db_connection = pool.get().unwrap();
-
-    // Provide template username
-    let db_body: String = session
-    .select(uid)
-    .inner_join(users)
-    .filter(uid.eq(uuid.0.to_string()))
-    .get_result::<String>(&db_connection)
-    .expect("Error on template");
-
-    */
-    // Replace the body with the mail of the user
     let body = "test".to_string();
 
     send_email_ses(from, to, subject, body).await.expect("Error on mail !");
+    
     Ok(HttpResponse::Ok().finish())
 }
 
@@ -244,8 +243,8 @@ async fn send_email_ses(
         .subject(subject)
         .body(body.to_string())?;
 
-    let creds = Credentials::new("shield.factory.isen".to_string(), "ShieldFactoryISEN".to_string());
-    
+    // let creds = Credentials::new("shield.factory.isen".to_string(), "ShieldFactoryISEN".to_string());
+    let creds = Credentials::new("noreply.shieldfactory.isen".to_string(), "sfshield123".to_string());
 
     let mailer = SmtpTransport::relay("smtp.gmail.com")
         .unwrap()
