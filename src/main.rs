@@ -138,7 +138,8 @@ async fn main() -> std::io::Result<()> {
             // Handlers
             .route("/mail", web::post().to(routes::data_mail))
             .route("/session_user", web::post().to(routes::session_user))
-            //.route("/user/{id}")
+
+            
     })  
 
     //.bind(format!("{}:{}", host, port))?

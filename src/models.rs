@@ -8,6 +8,7 @@ pub struct User {
     pub id_user: i32,
     pub username: String,
     pub passwd: String,
+    pub mail: String,
     pub date_create: SystemTime
 }
 
@@ -16,13 +17,15 @@ pub struct User {
 pub struct UserNew<'a> {
     pub username: &'a str,
     pub passwd: &'a str,
+    pub mail: &'a str,
     pub date_created: SystemTime
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserJson {
     pub username: String,
-    pub passwd: String
+    pub passwd: String,
+    pub mail: String
 }
 
 

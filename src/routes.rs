@@ -133,6 +133,7 @@ fn add_single_user(
                     username: &item.username,
                     //passwd: &item.passwd,
                     passwd: &format!("{}", &item.passwd),
+                    mail: &format!("{}", &item.mail),
                     date_created: SystemTime::now()
                        
                 };
@@ -207,12 +208,13 @@ pub async fn data_mail(
     item: web::Json<UserJson>
 ) -> Result<HttpResponse, Error> {
 
-    //let from: &str = &item.email;
-    let from: &str = &item.passwd;
+
+    let from: &str = &item.mail;
 
     // Replace the mail with database input mail
-    // let to = "Username <&mail>"
-    let to = "David NGUYEN <david.nguyen@isen.yncrea.fr>";
+    let to: &str = &item.mail;
+    // let to = "David NGUYEN <david.nguyen@isen.yncrea.fr>";
+
     let subject = "Welcome to ShieldFactory";
 
     let mut body = "https://localhost:8043/user/profile/".to_owned();
