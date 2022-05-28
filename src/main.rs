@@ -119,6 +119,8 @@ async fn main() -> std::io::Result<()> {
             .route("/style.css", web::get().to(routes::css_style))
             .route("/header.css", web::get().to(routes::css_header))
             
+            // Javascript route
+            .route("/key_generator.js", web::get().to(routes::js_key))
 
             // User API
             .route("/adduser", web::post().to(routes::add_user))
@@ -133,13 +135,13 @@ async fn main() -> std::io::Result<()> {
             .route("/user/profile/{id}", web::get().to(routes::profile))
             
             // Management page
-            .route("/user/index/{id}", web::get().to(routes::index))
+            .route("/user/key/{id}", web::get().to(routes::key_gen))
             
             // Handlers
             .route("/mail", web::post().to(routes::data_mail))
             .route("/session_user", web::post().to(routes::session_user))
 
-            
+
     })  
 
     //.bind(format!("{}:{}", host, port))?

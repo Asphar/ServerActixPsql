@@ -101,6 +101,15 @@ pub async fn css_style() -> Result<HttpResponse, Error> {
 }
 
 
+pub async fn js_key() -> Result<HttpResponse, Error> {
+    Ok(
+        HttpResponse::build(StatusCode::OK)
+            .content_type("text/css; charset=utf-8")
+            .body(include_str!("../templates/js/key_generator.js"))
+        
+    )
+}
+
 
 pub async fn add_user(
     pool: web::Data<Pool>,
@@ -174,10 +183,11 @@ pub async fn profile(
 
     let rendered = tera.render("profile.html.tera", &data).unwrap();
     HttpResponse::Ok().body(rendered)
+
 }
 
 
-pub async fn index(
+pub async fn key_gen(
     pool: web::Data<Pool>,
     tera: web::Data<Tera>, 
     uuid: web::Path<(String, )>
@@ -195,10 +205,10 @@ pub async fn index(
     .get_result::<String>(&db_connection)
     .expect("Error on template");
 
-    data.insert("title", "Shield Factory");
-    data.insert("name",&db_username);
+    //data.insert("title", "Shield Factory");
+    //data.insert("name",&db_username);
 
-    let rendered = tera.render("index.html.tera", &data).unwrap();
+    let rendered = tera.render("key_gen.html.tera", &data).unwrap();
     HttpResponse::Ok().body(rendered)
 }
 
@@ -210,11 +220,9 @@ pub async fn data_mail(
 
 
     let from: &str = &item.mail;
-
     // Replace the mail with database input mail
     let to: &str = &item.mail;
-    // let to = "David NGUYEN <david.nguyen@isen.yncrea.fr>";
-
+    // let to = "David NGUYEN <david.nguyen@isen.yncrea.fr>"
     let subject = "Welcome to ShieldFactory";
 
     let mut body = "https://localhost:8043/user/profile/".to_owned();
@@ -236,6 +244,7 @@ async fn send_email_ses(
     subject: &str,
     body: String,
 ) -> Result<(), Box<dyn std::error::Error>> {
+
     let email = Message::builder()
         .from(from.parse()?)
         .to(to.parse()?)
@@ -320,9 +329,6 @@ fn log_single_user(
     
 
 }
-
-
-
 
 
 

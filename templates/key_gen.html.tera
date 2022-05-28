@@ -6,18 +6,20 @@
     <link rel="icon" type="images/x-icon" href="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/logo_url.ico?raw=true">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/header.css">
     <link rel="stylesheet" href="/home.css">
 
     <title>Key generation</title>
-
 </head>
 <body>
+    <script src="/key_generator.js"></script>
+
     <div id="nav">
+
+
         <div class="logo">
-            <img src="../img/shield.PNG">
+            <img src="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/logo_url.ico?raw=true">
             <h1 class="titre">Shield Factory</h1>
         </div>
         <div class="links">
@@ -28,4 +30,22 @@
             <a href="./vpns.html">VPNs</a>
         </div>
     </div>
+
+        <h2> Hi, click on "Download" to get your private key ! <br>
+        Don't forget to not lose or share your private key !<br>
+        <p id="public"><script>write_private()</script><br>
+        <button type="button" onclick="download('Private_key.txt');"> Download</button></p><br>
+
+        <br>
+
+
+        Your public key is :
+        <p id="public"><script>write_public()</script><br>
+        You don't need to download it <br><br> Our server manage it and share it to others, but it's there</h2>
+
+        <footer>
+            <p>©2022 Shield Factory - All rights reserved</p>
+            <img src="../img/isen.png">
+        </footer>
 </body>
+

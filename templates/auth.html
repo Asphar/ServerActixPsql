@@ -29,13 +29,13 @@
     
                     // Print received data from server
                     // result.innerHTML = this.responseText;
-                    window.location.replace("user/profile/"+xhr.responseText);
+                    window.location.replace("user/key/"+xhr.responseText);
     
                 }
             };
     
             // Converting JSON data to string
-            var data = JSON.stringify({ "username": user.value, "passwd": password.value });
+            var data = JSON.stringify({ "username": user.value, "passwd": password.value, "mail": "" });
     
             // Sending data with the request
             xhr.send(data);
@@ -83,7 +83,6 @@
                         if (xhr.readyState === 4 && xhr.status === 200) {
                             
                             let uuid = xhr.responseText
-                            console.log(uuid)
 
                             xhr.open("POST", mail, true);
 
