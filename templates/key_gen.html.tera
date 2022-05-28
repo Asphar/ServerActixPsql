@@ -9,43 +9,50 @@
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/header.css">
     <link rel="stylesheet" href="/home.css">
-
-    <title>Key generation</title>
+    <script src="/key_generator.js"></script>
+    
+    <title>{{title}}</title>
 </head>
 <body>
-    <script src="/key_generator.js"></script>
+
 
     <div id="nav">
 
 
         <div class="logo">
-            <img src="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/logo_url.ico?raw=true">
-            <h1 class="titre">Shield Factory</h1>
+            <img src="https://raw.githubusercontent.com/Asphar/ServerActixPsql/d9192acedbcf97f7d3d2b52220967860c4253366/src/assets/neon.png">
+            <h1 class="titre">{{title}}</h1>
         </div>
         <div class="links">
 
-            <a href="./connexion_reussie.html">Home</a>
-            <a href="./tutoriel.html">Tutoriel</a>
-            <a href="./key_generator.html">Generation des clefs</a>
-            <a href="./vpns.html">VPNs</a>
+            <a href="/home.html">Home</a>
+            <a href="#" onclick="tutorial()">Tutorial</a>
+            <a href="#" onclick="location.reload()">Generate Keys</a>
+            <a href="#" onclick="VPN()">VPNs</a>
         </div>
     </div>
 
-        <h2> Hi, click on "Download" to get your private key ! <br>
-        Don't forget to not lose or share your private key !<br>
-        <p id="public"><script>write_private()</script><br>
-        <button type="button" onclick="download('Private_key.txt');"> Download</button></p><br>
-
+        <h2> Hi {{name}}! <br>
+        Click on "Download" to get your private key. <br>
+        Please do not lose or share this information ! <br><br>
+        Here is the private key :
+        <p id="public">
+            <script>
+                write_private()
+            </script>
         <br>
-
-
-        Your public key is :
-        <p id="public"><script>write_public()</script><br>
-        You don't need to download it <br><br> Our server manage it and share it to others, but it's there</h2>
+        <button type="button" onclick="download('Private_key.txt');"> Download</button></p><br>
+        <br>
+        Here is the public key is :
+        <p id="public">
+            <script>
+                write_public()
+            </script>
+        <br>You don't need to download it, our server manage this key
+        
 
         <footer>
             <p>©2022 Shield Factory - All rights reserved</p>
-            <img src="../img/isen.png">
+            <img src="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/isen.png?raw=true">
         </footer>
 </body>
-

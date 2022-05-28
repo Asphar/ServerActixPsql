@@ -16,6 +16,7 @@
             // Creating a XHR object
             let xhr = new XMLHttpRequest();
             let url = "/login";
+            let mail = "/mail";
 
             // open a connection
             xhr.open("POST", url, true);
@@ -29,8 +30,26 @@
     
                     // Print received data from server
                     // result.innerHTML = this.responseText;
-                    window.location.replace("user/key/"+xhr.responseText);
+                    //window.location.replace("user/key/"+xhr.responseText);
+                    let uuid = xhr.responseText
+                    
+                    xhr.open("POST", mail, true);
     
+                    // Set the request header i.e. which type of content you are sending
+                    xhr.setRequestHeader("Content-Type", "application/json");
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+
+
+                        }
+                    };
+                                // Converting JSON data to string
+                    var data = JSON.stringify({ "username": user.value, "passwd": password.value, "mail": uuid });
+            
+                    // Sending data with the request
+                    xhr.send(data);
+
                 }
             };
     
@@ -51,12 +70,11 @@
             let verif_pass = document.querySelector('#verif_pass');
             const link = document.querySelector('#signup_button');
 
-            console.log(link);
                 
             // Creating a XHR object
             let xhr = new XMLHttpRequest();
             let url = "/adduser";
-            let mail = "/mail";
+            let mail = "/confirm";
             let session = "/login"
 
             // open a connection

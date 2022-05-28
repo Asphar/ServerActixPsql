@@ -140,7 +140,6 @@ fn add_single_user(
                 let new_user = UserNew {
   
                     username: &item.username,
-                    //passwd: &item.passwd,
                     passwd: &format!("{}", &item.passwd),
                     mail: &format!("{}", &item.mail),
                     date_created: SystemTime::now()
@@ -160,7 +159,7 @@ fn add_single_user(
 }
 
 
-pub async fn profile(
+pub async fn tutorial(
     pool: web::Data<Pool>,
     tera: web::Data<Tera>, 
     uuid: web::Path<(String, )>
@@ -181,7 +180,7 @@ pub async fn profile(
     data.insert("title", "Shield Factory");
     data.insert("name",&db_username);
 
-    let rendered = tera.render("profile.html.tera", &data).unwrap();
+    let rendered = tera.render("tutorial.html.tera", &data).unwrap();
     HttpResponse::Ok().body(rendered)
 
 }
@@ -205,28 +204,62 @@ pub async fn key_gen(
     .get_result::<String>(&db_connection)
     .expect("Error on template");
 
-    //data.insert("title", "Shield Factory");
-    //data.insert("name",&db_username);
+    data.insert("title", "Shield Factory");
+    data.insert("name",&db_username);
 
     let rendered = tera.render("key_gen.html.tera", &data).unwrap();
     HttpResponse::Ok().body(rendered)
 }
 
 
-
-pub async fn data_mail(
+pub async fn confirm_mail(
     item: web::Json<UserJson>
 ) -> Result<HttpResponse, Error> {
 
 
     let from: &str = &item.mail;
-    // Replace the mail with database input mail
     let to: &str = &item.mail;
-    // let to = "David NGUYEN <david.nguyen@isen.yncrea.fr>"
+
+
     let subject = "Welcome to ShieldFactory";
 
-    let mut body = "https://localhost:8043/user/profile/".to_owned();
-    let borrowed_string: &str = &item.username;
+    let mut body = "https://localhost:8043/auth.html".to_owned();
+    
+    
+    body.push_str("\n\n\nMail verified !");
+    body.push_str("\n\n\nYou have been accepted to our ShieldFactory team !");
+    body.push_str("\n\nFollow the link to access our website.");
+    body.push_str("\n\nHave a fun trip ! \n\nThe Shield Factory team.");
+
+    send_email_ses(from, to, subject, body).await.expect("Error on mail !");
+    
+    Ok(HttpResponse::Ok().finish())
+}
+
+
+pub async fn data_mail(
+    item: web::Json<UserJson>,
+    pool: web::Data<Pool>
+) -> Result<HttpResponse, Error> {
+
+    let db_connection = pool.get().unwrap();
+    
+    let db_mail: String = users
+    .select(mail)
+    .filter(username.eq(&item.username))
+    .filter(username.eq(&item.passwd))
+    .get_result::<String>(&db_connection)
+    .expect("Error on template");
+
+    // Replace with diesel value
+    let from: &str = &db_mail;
+    let to: &str = &db_mail;
+
+    let subject = "Welcome to ShieldFactory";
+
+    let mut body = "https://localhost:8043/user/key/".to_owned();
+    // Receive uuid
+    let borrowed_string: &str = &item.mail;
     
     body.push_str(borrowed_string);
     body.push_str("\nYou have been accepted to our ShieldFactory team !");
@@ -303,7 +336,6 @@ fn log_single_user(
                 let new_session = SessionNew {
 
                     uid: &format!("{}", uuid),
-                    // cookie: &item.cookie ? sent in Json asynchronously,
                     id_users: id,
                     timestamp: SystemTime::now()
                 };

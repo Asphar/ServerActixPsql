@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="images/x-icon" href="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/logo_url.ico?raw=true">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/header.css">
+    <link rel="stylesheet" href="/home.css">
+    <script src="/key_generator.js"></script>
+
+    <title>{{title}}</title>
+</head>
+<body>
+
+    <div id="nav">
+        <div class="logo">
+            <img src="https://raw.githubusercontent.com/Asphar/ServerActixPsql/d9192acedbcf97f7d3d2b52220967860c4253366/src/assets/neon.png">
+            <h1 class="titre">{{title}}</h1>
+        </div>
+        <div class="links">
+
+            <a href="/home.html">Home</a>
+            <a href="#" >Tutorial</a>
+            <a href="#" onclick="">Generate Keys</a>
+            <a href="#" onclick="VPN()">VPNs</a>
+        </div>
+    </div>
+
+        <h3>
+        Hello, first of all, to use our services, you need to have Wireguard installed beforehand on your device.
+        <br><br>
+        <div class="link"><a href="https://www.wireguard.com/install/">Click here to see how to install it</a></div>
+        <br><br>
+        Then, once you've installed Wireguard on your device, you'll need to generate some keys to allow communications.
+        <br><br>
+        To generate your keys, click <a href="#" onclick="VPN()">here</a><br>
+        <img src="https://raw.githubusercontent.com/Asphar/ServerActixPsql/d9192acedbcf97f7d3d2b52220967860c4253366/src/assets/key_tuto.png" style="width:1200px;height:800px;" class="center"><br>
+        <br>
+        Like said in the page that generates your keys, never share or lose your private key<br>
+        Because that's what'll allow connection
+        <br><br>
+        Congratulations, you now have your personal keys !!<br>
+        You can now get your configuration file to access your VPN.<br>
+        <a href="#" onclick="VPN()">Click here</a> to go to your VPN management page.
+        <br><br>
+        <h3>
+    <footer>
+        <p>©2022 Shield Factory - All rights reserved</p>
+        <img src="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/isen.png?raw=true">
+    </footer>
+</body>
+</html>

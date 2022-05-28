@@ -202,3 +202,27 @@ function download(filename) {
 
     document.body.removeChild(element);
 }
+
+function VPN() {
+    let str = window.location.href
+    str = str.split('/').pop();
+
+    window.location.replace("https://localhost:8043/user/profile/" + str);
+
+}
+
+function tutorial() {
+    let str = window.location.href
+    str = str.split('/').pop();
+
+    window.location.replace("https://localhost:8043/user/tuto/" + str);
+
+}
+
+function keygen() {
+    let str = window.location.href
+    str = str.split('/').pop();
+
+    window.location.replace("https://localhost:8043/user/index/" + str);
+
+}

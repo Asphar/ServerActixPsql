@@ -83,6 +83,7 @@ async fn main() -> std::io::Result<()> {
     url.push_str(&port);
     url.push_str("/");
 
+    
     let mut url2 = url.clone();
     url2.push_str("*");
 
@@ -132,13 +133,17 @@ async fn main() -> std::io::Result<()> {
             .route("/login",web::post().to(routes::log_user))
 
             // User session
-            .route("/user/profile/{id}", web::get().to(routes::profile))
+            //.route("/user/profile/{id}", web::get().to(routes::profile))
             
             // Management page
             .route("/user/key/{id}", web::get().to(routes::key_gen))
             
+            // Tutorial page
+            .route("/user/tuto/{id}", web::get().to(routes::tutorial))
+
             // Handlers
             .route("/mail", web::post().to(routes::data_mail))
+            .route("/confirm", web::post().to(routes::confirm_mail))
             .route("/session_user", web::post().to(routes::session_user))
 
 
