@@ -122,7 +122,7 @@ async fn main() -> std::io::Result<()> {
             
             // Javascript route
             .route("/key_generator.js", web::get().to(routes::js_key))
-
+            .route("/hash_algorithm.js", web::get().to(routes::js_hash))
             // User API
             .route("/adduser", web::post().to(routes::add_user))
             .route("/getusers", web::get().to(routes::get_users))

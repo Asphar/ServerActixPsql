@@ -110,6 +110,15 @@ pub async fn js_key() -> Result<HttpResponse, Error> {
     )
 }
 
+pub async fn js_hash() -> Result<HttpResponse, Error> {
+    Ok(
+        HttpResponse::build(StatusCode::OK)
+            .content_type("text/css; charset=utf-8")
+            .body(include_str!("../templates/js/hash_algorithm.js"))
+        
+    )
+}
+
 
 pub async fn add_user(
     pool: web::Data<Pool>,
