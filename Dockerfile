@@ -1,21 +1,21 @@
-FROM rust:1.59.0 as builder
+FROM rust:latest as builder
 
-RUN mkdir /usr/src/rustwebservice
-WORKDIR /usr/src/rustwebservice
+
+RUN mkdir -p /usr/src/actix
+WORKDIR /usr/src/actix
 COPY . .
-
-RUN rustup default nightly
 RUN cargo build --release
 
-EXPOSE 8000
 
-FROM gcr.io/distroless/cc-debian11
+FROM rust:latest
 
+WORKDIR /usr/src/actix
 
-COPY --from=builder /home/kali/Desktop/Shield_website/DataGit/ServerActixPsql/target/debug/demo /usr/src/rustwebservice/
+COPY --from=builder /usr/src/actix/target/release/demo /usr/src/actix/
+COPY cert.pem cert.pem
+COPY key.pem key.pem
+COPY .env .env
 
-WORKDIR /usr/src/rustwebservice
-
-EXPOSE 8000
+EXPOSE 8043
 
 CMD ["./demo"]
