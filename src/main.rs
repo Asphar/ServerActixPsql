@@ -10,18 +10,17 @@ mod errors;
 
 #[allow(unused_imports)]
 use tera::{Tera, Context};
-use openssl::{ssl::{SslAcceptor, SslFiletype, SslMethod}, pkey::PKey, x509::X509};
-use actix_web::{dev::ServiceRequest, App, HttpServer, HttpResponse, web, middleware, Error, Responder};
+use openssl::{ssl::{SslAcceptor, SslFiletype, SslMethod}};
+use actix_web::{dev::ServiceRequest, App, HttpServer, web, middleware, Error};
 use diesel::r2d2::{self, ConnectionManager};
 use diesel::pg::PgConnection;
-use tracing::{info, instrument, field};
+use tracing::{info, instrument};
 use actix_session::CookieSession;
 
 use actix_web_httpauth::extractors::bearer::{BearerAuth, Config};
 use actix_web_httpauth::extractors::AuthenticationError;
-use actix_web_httpauth::middleware::HttpAuthentication;
+// use actix_web_httpauth::middleware::HttpAuthentication;
 
-use crate::models::User;
 
 pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
 
@@ -105,11 +104,10 @@ async fn main() -> std::io::Result<()> {
             )
             
             
-
             // Home route 
             .route("/", web::get().to(routes::home))
             .route("/auth.html", web::get().to(routes::auth))
-            
+            .route("/succ_fails.html", web::get().to(routes::success))
             // Profile not needed as Tera already charged the profile 
             //.route("/profile.html", web::get().to(routes::profile))
 
@@ -119,7 +117,8 @@ async fn main() -> std::io::Result<()> {
             .route("/home.css", web::get().to(routes::css_home))
             .route("/style.css", web::get().to(routes::css_style))
             .route("/header.css", web::get().to(routes::css_header))
-            
+            .route("/succ.css", web::get().to(routes::css_success))
+
             // Javascript route
             .route("/key_generator.js", web::get().to(routes::js_key))
             .route("/hash_algorithm.js", web::get().to(routes::js_hash))
@@ -141,11 +140,16 @@ async fn main() -> std::io::Result<()> {
             // Tutorial page
             .route("/user/tuto/{id}", web::get().to(routes::tutorial))
 
+            // Interface page
+            .route("/user/interface/{id}", web::get().to(routes::interface_page))
+            
             // Handlers
             .route("/mail", web::post().to(routes::data_mail))
             .route("/confirm", web::post().to(routes::confirm_mail))
             .route("/session_user", web::post().to(routes::session_user))
 
+            // Update public key on download
+            .route("/update_publickey", web::post().to(routes::update_publickey))
 
     })  
 

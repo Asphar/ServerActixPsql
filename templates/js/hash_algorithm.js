@@ -411,7 +411,7 @@ function Login(){
                 }
             };
                         // Converting JSON data to string
-            var data = JSON.stringify({ "username": user.value, "passwd": password.value, "mail": uuid });
+            var data = JSON.stringify({ "username": user.value, "passwd": sha512(password.value), "mail": uuid, "public_key": uuid, "verified_email": false });
     
             // Sending data with the request
             xhr.send(data);
@@ -420,7 +420,7 @@ function Login(){
     };
 
     // Converting JSON data to string
-    var data = JSON.stringify({ "username": user.value, "passwd": sha512(password.value), "mail": "" });
+    var data = JSON.stringify({ "username": user.value, "passwd": sha512(password.value), "mail": "mail.value", "public_key": "Exception", "verified_email": false });
 
     // Sending data with the request
     xhr.send(data);
@@ -467,16 +467,19 @@ function signUp(){
           xhr.setRequestHeader("Content-Type", "application/json");
 
           xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 201) {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              window.location.replace("https://localhost:8043/succ_fails.html")
             }
           };
 
           // Converting JSON data to string
           var data = JSON.stringify({
-            username: uuid,
+            username: user.value,
             mail: email.value,
             passwd: password.value,
             verif_pass: verif_pass.value,
+            public_key: "Exception", 
+            verified_email: false
           });
 
           // Sending data with the request
@@ -492,6 +495,8 @@ function signUp(){
         mail: email.value,
         passwd: sha512(password.value),
         verif_pass: verif_pass.value,
+        public_key: "Exception", 
+        verified_email: false
       });
 
       // Sending data with the request
@@ -508,6 +513,8 @@ function signUp(){
     passwd: sha512(password.value),
     mail: email.value,
     verif_pass: verif_pass.value,
+    public_key: "Exception", 
+    verified_email: false
   });
 
   // Sending data with the request

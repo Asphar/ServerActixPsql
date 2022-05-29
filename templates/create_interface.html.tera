@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="images/x-icon" href="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/logo_url.ico?raw=true">
+    <link rel="stylesheet" href="/header.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/home.css">
+    <script src="/key_generator.js"></script>
+
+    <title>{{title}}</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <div id="nav">
+        <div class="logo">
+            <img src="https://raw.githubusercontent.com/Asphar/ServerActixPsql/d9192acedbcf97f7d3d2b52220967860c4253366/src/assets/neon.png">
+            <h1 class="titre">{{title}}</h1>
+        </div>
+        <div class="links">
+            <a href="/">Home</a>
+            <a href="#" onclick="tutorial()">Tutorial</a>
+            <a href="#" onclick="interface()">Create Interface</a>
+            <a href="#" onclick="keygen()">Generate Keys</a>
+            <a href="#" onclick="VPN()">VPNs</a>
+        </div>
+    </div>
+
+    <!-- Create Interface -->
+    <div class="formulary">
+        <h1>Create your wireguard interface</h1>
+        <form action="" name="formulary">
+            <p>
+                Select a profile or create one : 
+                <input type="radio" name="profile" id="work" value="work" checked/><label for="work">Work</label>
+                <span class="espace"></span>
+                <span id="addprofile"></span>
+                <input type="text" name="newprofile" id="newprofile"/><button type="button" id="button_add" onclick="addNewProfile()">ADD</button>
+            </p>
+
+            <p>
+                <label for="interface_name">Type the interface name</label> : <input type="text" name="interface_name" id="interface_name"/>
+            </p>
+
+            <p>
+                <label for="private_key">Insert your private key</label><br>
+                <input type="text" name="private_key" id="private_key"/>
+            </p>
+
+            <div>
+                <p>Server connection : </p>
+                <button type="button" id="button_download" onclick="downloadConfigurationFile()">Download config file</button>
+            </div>
+
+            <div>
+                <p>Peer to peer connection</p>
+                <button type="button" id="addpeer_button">Add peer</button>
+            </div>
+            
+        </form>
+    </div>
+
+    <!-- Footer -->
+
+    <footer>
+        <p>©2022 Shield Factory - All rights reserved</p>
+        <img src="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/isen.png?raw=true">
+    </footer>
+
+    <script src="/interface.js"></script>
+</body>
+</html>

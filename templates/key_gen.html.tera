@@ -25,9 +25,10 @@
         </div>
         <div class="links">
 
-            <a href="/home.html">Home</a>
+            <a href="/">Home</a>
             <a href="#" onclick="tutorial()">Tutorial</a>
-            <a href="#" onclick="location.reload()">Generate Keys</a>
+            <a href="#" onclick="interface()">Create Interface</a>
+            <a href="#" onclick="keygen()">Generate Keys</a>
             <a href="#" onclick="VPN()">VPNs</a>
         </div>
     </div>
@@ -41,7 +42,7 @@
                 write_private()
             </script>
         <br>
-        <button type="button" onclick="download('Private_key.txt');"> Download</button></p><br>
+        <button type="button" onclick="download('Private_key.txt')" id="download_button"> Download</button></p><br>
         <br>
         Here is the public key is :
         <p id="public">

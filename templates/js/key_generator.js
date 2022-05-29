@@ -201,13 +201,45 @@ function download(filename) {
     element.click();
 
     document.body.removeChild(element);
+
+              
+    // let submit = document.querySelector('#download_button');
+  
+        
+    // Creating a XHR object
+    let xhr = new XMLHttpRequest();
+    let url = "/update_publickey";
+
+    // open a connection
+    xhr.open("POST", url, true);
+
+    // Set the request header i.e. which type of content you are sending
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    // Create a state change callback
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+
+            // Print received data from server
+            // result.innerHTML = this.responseText;
+            //window.location.replace("user/key/"+xhr.responseText);
+
+        }
+    };
+    // Converting JSON data to string
+    var data = JSON.stringify({ "public_key": publicKey });
+
+    // Sending data with the request
+    xhr.send(data);
+    
+    
 }
 
 function VPN() {
     let str = window.location.href
     str = str.split('/').pop();
 
-    window.location.replace("https://localhost:8043/user/profile/" + str);
+    window.location.replace("https://localhost:8043/user/vpn/" + str);
 
 }
 
@@ -223,6 +255,13 @@ function keygen() {
     let str = window.location.href
     str = str.split('/').pop();
 
-    window.location.replace("https://localhost:8043/user/index/" + str);
+    window.location.replace("https://localhost:8043/user/key/" + str);
 
+}
+
+function interface() {
+    let str = window.location.href
+    str = str.split('/').pop();
+
+    window.location.replace("https://localhost:8043/user/interface/" + str);
 }

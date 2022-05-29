@@ -15,42 +15,59 @@
 </head>
 <body>
 
+    <!-- Barre de navigation -->
+
     <div id="nav">
         <div class="logo">
             <img src="https://raw.githubusercontent.com/Asphar/ServerActixPsql/d9192acedbcf97f7d3d2b52220967860c4253366/src/assets/neon.png">
             <h1 class="titre">{{title}}</h1>
         </div>
         <div class="links">
-
             <a href="/">Home</a>
             <a href="#" onclick="tutorial()">Tutorial</a>
             <a href="#" onclick="interface()">Create Interface</a>
             <a href="#" onclick="keygen()">Generate Keys</a>
             <a href="#" onclick="VPN()">VPNs</a>
+
         </div>
     </div>
 
-        <h3>
-        Hello {{name}}! First of all, to use our services, you need to have Wireguard installed beforehand on your device.
-        <br><br>
-        <div class="link"><a href="https://www.wireguard.com/install/">Click here to see how to install it</a></div>
-        <br><br>
-        Then, once you've installed Wireguard on your device, you'll need to generate some keys to allow communications.
-        <br><br>
-        To generate your keys, click <a href="#" onclick="VPN()">here</a><br>
-        <img src="https://raw.githubusercontent.com/Asphar/ServerActixPsql/d9192acedbcf97f7d3d2b52220967860c4253366/src/assets/key_tuto.png" style="width:1200px;height:800px;" class="center"><br>
-        <br>
-        Like said in the page that generates your keys, never share or lose your private key<br>
-        Because that's what'll allow connection
-        <br><br>
-        Congratulations, you now have your personal keys !!<br>
-        You can now get your configuration file to access your VPN.<br>
-        <a href="#" onclick="VPN()">Click here</a> to go to your VPN management page.
-        <br><br>
-        <h3>
+    <!-- Modify Interface -->
+    <div class="formulary">
+        <h1>Edit interface / Profile</h1>
+        <p>
+            Select the profile you want to edit : <br>
+            <span id="checkbox">
+                <input type="radio" name="profile" id="work_chayer" value="work" checked/><label for="work">Work</label>
+                <span class="espace"></span>
+            </span>
+        </p>
+
+        <p>
+            WORK<br>
+            <label for="change_name"></label> Change name : <input type="text" name="change_name" id="change_name"/>
+        </p>
+
+        <p>
+            Select interface to edit.
+        </p>
+
+        <p>
+            <label for="change_name2"></label> Change name : <input type="text" name="change_name2" id="change_name2"/>
+        </p>
+
+        <p>
+            <label for="change_peer"></label> Change peer's wireguard address : <input type="text" name="change_peer" id="change_peer"/>
+        </p>
+    </div>
+
+    <!-- Footer -->
+
     <footer>
         <p>©2022 Shield Factory - All rights reserved</p>
         <img src="https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/isen.png?raw=true">
     </footer>
+    
+
+
 </body>
-</html>

@@ -9,7 +9,10 @@ pub struct User {
     pub username: String,
     pub passwd: String,
     pub mail: String,
-    pub date_create: SystemTime
+    pub verified_email: bool,
+    pub interface_address: String,
+    pub public_key: String,
+    pub date_created: SystemTime
 }
 
 #[derive(Debug, Insertable)]
@@ -18,6 +21,9 @@ pub struct UserNew<'a> {
     pub username: &'a str,
     pub passwd: &'a str,
     pub mail: &'a str,
+    pub verified_email: &'a bool,
+    pub interface_address: &'a str,
+    pub public_key: &'a str,
     pub date_created: SystemTime
 }
 
@@ -25,9 +31,15 @@ pub struct UserNew<'a> {
 pub struct UserJson {
     pub username: String,
     pub passwd: String,
-    pub mail: String
+    pub mail: String,
+    pub public_key: String,
+    pub verified_email: bool
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UserKeyJson{
+    pub public_key: String,
+}
 
 #[derive(Debug, Serialize, Deserialize, Queryable)]
 pub struct Session {
@@ -50,3 +62,38 @@ pub struct SessionJson {
     pub username: String,
     pub passwd: String
 }
+
+
+#[derive(Debug, Serialize, Deserialize, Queryable)]
+pub struct Interface {
+    pub id_interface: i32,
+    pub dns: String,
+    pub listen_port: i32,
+    pub interface_name: String,
+    pub profile_name: String,
+    pub id_users: i32,
+}
+
+#[derive(Debug, Insertable)]
+#[table_name = "interface"]
+pub struct InterfaceNew<'a>{
+    pub dns: &'a str,
+    pub listen_port: &'a i32,
+    pub interface_name: &'a str,
+    pub profile_name: &'a str,
+    pub id_users: &'a i32,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct InterfaceJson{
+    pub interface_name: String,
+    pub profile_name: String,
+}
+
+#[derive(Debug, Insertable)]
+#[table_name = "interface"]
+pub struct InterfaceUpdate<'a> {
+    pub interface_name: &'a str,
+    pub profile_name: &'a str,
+}
+
