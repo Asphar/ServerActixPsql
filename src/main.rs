@@ -122,6 +122,8 @@ async fn main() -> std::io::Result<()> {
             // Javascript route
             .route("/key_generator.js", web::get().to(routes::js_key))
             .route("/hash_algorithm.js", web::get().to(routes::js_hash))
+            .route("/interface.js", web::get().to(routes::js_interface))
+
             // User API
             .route("/adduser", web::post().to(routes::add_user))
             .route("/getusers", web::get().to(routes::get_users))
@@ -144,12 +146,13 @@ async fn main() -> std::io::Result<()> {
             .route("/user/interface/{id}", web::get().to(routes::interface_page))
             
             // Handlers
+            .route("/user/update/{id}", web::post().to(routes::update_publickey))
             .route("/mail", web::post().to(routes::data_mail))
             .route("/confirm", web::post().to(routes::confirm_mail))
             .route("/session_user", web::post().to(routes::session_user))
 
             // Update public key on download
-            .route("/update_publickey", web::post().to(routes::update_publickey))
+            
 
     })  
 

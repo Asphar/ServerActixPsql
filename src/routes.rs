@@ -1,3 +1,5 @@
+use diesel::sql_types::Timestamp;
+use diesel::pg::upsert::excluded;
 //use rusoto_ses::SesClient;
 use rand::Rng;
 use lettre::transport::smtp::authentication::Credentials;
@@ -8,9 +10,11 @@ use crate::Pool;
 use crate::models::{User, UserJson, UserKeyJson, UserNew};
 use crate::models::{Session, SessionNew, SessionJson};
 use crate::models::{Interface, InterfaceNew, InterfaceJson, InterfaceUpdate};
+use crate::models::{PubKey, PubKeyNew, PubKeyJson};
 
 use super::schema::session::dsl::*;
 use super::schema::users::dsl::*;
+use crate::schema::pubkey::dsl::*;
 #[path = "./cipher.rs"] mod cipher;
 // use diesel::result::DatabaseErrorInformation;
 use uuid::Uuid;
@@ -629,7 +633,7 @@ pub async fn update_interface(
     .get_result::<i32>(&db_connection)
     .expect("Error on interface");
 
-
+    
     diesel::update(interface)
         .filter(id_users.eq(&connected_user))
         .set((
@@ -661,11 +665,23 @@ pub async fn update_publickey(
     .expect("Error on interface");
 
     diesel::update(users)
-        .filter(id_user.eq(&connected_user))
-        .set(passwd.eq(&item.public_key))
-        .execute(&db_connection)
-        .expect("Error updating");
-        
+    .filter(id_user.eq(&connected_user))
+    .set(public_key.eq(&item.public_key))
+    .execute(&db_connection)
+    .expect("Error updating");
+    /* 
+    let new_key = PubKeyNew {
+        public_key: &item.public_key,
+        id_users_p: connected_user
+
+    };
+
+
+    insert_into(pubkey)
+    .values(&new_key)
+    .execute(&db_connection)
+    .expect("Error saving new key");
+    */
 
 
     Ok(HttpResponse::Ok().finish())

@@ -15,7 +15,7 @@ function downloadConfigurationFile() {
     var element = document.createElement("a");
 
     var filename = interfaceName + ".conf";
-    var contentFile = "[Interface]\nPrivateKey = " + privateKey + "\nListenPort = 51820\nAddress = 10.10.1.1/24\nDNS = 10.43.0.10  \n\n[Peer]\nEndpoint = 10.42.8.2\nAllowedIPs = 0.0.0.0/0\nPublicKey = +gGTyHDbWmrCXxscYs6WIGL9GFp04d1T9REmQa3rHGg=";
+    var contentFile = "[Interface]\nPrivateKey = " + privateKey + "\nListenPort = 51820\nAddress = 10.10.1.1/24\nDNS = 10.43.0.10  \n\n[Peer]\nEndpoint = 10.42.8.2\nAllowedIPs = 0.0.0.0/0\nPublicKey = gSPRSO1X+tOZMS4L5w/ze/XOeAM6V2KCZM94Waj4kEo=";
 
     if(interfaceName === "" || privateKey === "") {
         alert("fill in all the forms");

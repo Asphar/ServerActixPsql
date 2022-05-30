@@ -10,6 +10,13 @@ CREATE TABLE users (
     date_created TIMESTAMP NOT NULL
 );
 
+CREATE TABLE pubkey (
+    id_key SERIAL PRIMARY KEY       ,
+    public_key TEXT NOT NULL        ,
+    id_users_p INTEGER UNIQUE NOT NULL,
+    FOREIGN KEY(id_users_p) REFERENCES users(id_user)
+);
+
 CREATE TABLE session (
     id_session SERIAL PRIMARY KEY   , 
     uid TEXT NOT NULL               ,

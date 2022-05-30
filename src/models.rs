@@ -36,6 +36,7 @@ pub struct UserJson {
     pub verified_email: bool
 }
 
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserKeyJson{
     pub public_key: String,
@@ -45,7 +46,7 @@ pub struct UserKeyJson{
 pub struct Session {
     pub id_session: i32,
     pub uid: String,
-    pub id_user: i32,
+    pub id_users: i32,
     pub timestamp: SystemTime
 }
 
@@ -97,3 +98,23 @@ pub struct InterfaceUpdate<'a> {
     pub profile_name: &'a str,
 }
 
+
+
+#[derive(Debug, Serialize, Deserialize, Queryable)]
+pub struct PubKey {
+    pub id_pubkey: i32,
+    pub public_key: String,
+    pub id_users: i32
+}
+
+#[derive(Debug, Insertable)]
+#[table_name = "pubkey"]
+pub struct PubKeyNew<'a> {
+    pub public_key: &'a str,
+    pub id_users_p: i32
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PubKeyJson {
+    pub public_key: String,
+}

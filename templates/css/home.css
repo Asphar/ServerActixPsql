@@ -70,12 +70,90 @@ h3 {
 
     align-items: center;
     flex-direction: column;
-    background: url(https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/sf.png?raw=true);
+    background: url(../../img/sf.png);
     background-size: cover;
 }
 
+/* ------------------------------------------------------- create_interface.html --------------------------------------------------------------------- */
+.formulary{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5%;
+}
 
+.formulary form p {
+    margin-bottom: 40px;
+}
 
+#newprofile{
+    width: 100px;
+}
+
+.espace {
+    margin: 20px;
+}
+
+#button_download {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #7f5a83;
+    background-image: linear-gradient(315deg, #7f5a83 0%, #0d324d 74%);
+    background-size: 200% 100%;
+    background-position: left;
+    background-repeat: no-repeat;
+    transition: 500ms;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+}
+
+#button_download:before{
+    content: 'Download configuration file';
+	color: rgba(255,255,255,0.5);
+	font-size: 16px;
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 140px;
+	height: 40px;
+	background-color: #1b2845;
+	background-image: linear-gradient(315deg, #1b2845 0%, #274060 74%);
+	transition: 500ms;
+}
+
+#button_download:hover {
+	background-position: right;
+}
+
+#button_download:hover:before {
+	color: rgba(255,255,255,0.8);
+}
+
+#button_download:focus {
+	outline: none;
+}
+
+/* -------------------------------------------------- vpns.html ------------------------------------------------------------------------ */
+#checkbox {
+    position: relative;
+    left: 40%;
+}
+
+/* ------------------------------------------ */
 .wave::before {
     content: '';
     position: absolute;
@@ -83,7 +161,7 @@ h3 {
     padding-top: 12%;
     top: -5px;
     left: 0;
-    background-image: url(https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/wave.png?raw=true);
+    background-image: url(../../img/wave1.png);
     background-repeat: repeat-x;
     background-size: 100%;
     opacity: .2;
@@ -97,7 +175,7 @@ h3 {
     padding-top: 12%;
     top: -5px;
     left: 0;
-    background-image: url(https://github.com/Asphar/ServerActixPsql/blob/main/src/assets/wave.png?raw=true);
+    background-image: url(../../img/wave1.png);
     background-repeat: repeat-x;
     background-size: 100%;
     opacity: .8;

@@ -10,6 +10,14 @@ table! {
 }
 
 table! {
+    pubkey (id_key) {
+        id_key -> Int4,
+        public_key -> Text,
+        id_users_p -> Int4,
+    }
+}
+
+table! {
     session (id_session) {
         id_session -> Int4,
         uid -> Text,
@@ -32,10 +40,12 @@ table! {
 }
 
 joinable!(interface -> users (id_users));
+joinable!(pubkey -> users (id_users_p));
 joinable!(session -> users (id_users));
 
 allow_tables_to_appear_in_same_query!(
     interface,
+    pubkey,
     session,
     users,
 );

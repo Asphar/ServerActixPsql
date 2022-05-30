@@ -191,24 +191,11 @@ function CopyPrivate()
 
 
 function download(filename) {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(privateKey));
-    element.setAttribute('download', filename);
+    let str = window.location.href
+    str = str.split('/').pop();
 
-    element.style.display = 'none';
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
-
-              
-    // let submit = document.querySelector('#download_button');
-  
-        
-    // Creating a XHR object
     let xhr = new XMLHttpRequest();
-    let url = "/update_publickey";
+    let url = "/user/update/" + str;
 
     // open a connection
     xhr.open("POST", url, true);
@@ -231,6 +218,24 @@ function download(filename) {
 
     // Sending data with the request
     xhr.send(data);
+
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(privateKey));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+
+              
+    // let submit = document.querySelector('#download_button');
+  
+        
+    // Creating a XHR object
+    
     
     
 }
